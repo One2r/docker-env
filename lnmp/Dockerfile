@@ -82,5 +82,6 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& cd redis-3.2.11 \
 	&& make \
 	&& make PREFIX=/usr/local/redis-3.2.11 install \
+	&& mkdir /usr/local/redis-3.2.11/etc/ \
 	&& cp redis.conf /usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
