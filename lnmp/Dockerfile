@@ -1,16 +1,15 @@
 FROM centos:latest
 
-RUN yum -y install yum-fastestmirror
-RUN yum -y update
+RUN yum -y install yum-fastestmirror \
+ 	&& yum -y update
 
-RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n
-RUN rm -rf /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN yum install -y ntp net-tools	
-RUN ntpdate -u pool.ntp.org
+RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
+	&& rm -rf /etc/localtime \
+	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN for packages in epel-release patch wget  make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz screen rsync libmcrypt-devel; \
-	do yum -y install $packages; done
+RUN for packages in epel-release vim patch wget  make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz screen rsync libmcrypt-devel ntp net-tools; \
+	do yum -y install $packages; done \
+	&& ntpdate -u pool.ntp.org
 	
 RUN yum -y remove php* \
 	&& yum -y remove mysql-server mysql \
