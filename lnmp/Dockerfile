@@ -86,3 +86,5 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& mkdir /usr/local/redis-3.2.11/etc/
 ADD ./redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
+
+WORKDIR ~/
