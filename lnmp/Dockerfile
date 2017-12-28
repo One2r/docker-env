@@ -56,8 +56,9 @@ RUN tar -xzvf php-7.1.12.tar.gz \
 	--disable-fileinfo \
 	--enable-opcache \
 	&& make \
-	&& make install \
-	&& cp php.ini-production /usr/local/php-7.1.12/etc/php.ini
+	&& make install
+
+ADD ./etc/php/php.ini /usr/local/php-7.1.12/etc/php.ini
 
 RUN rm -f /usr/bin/php \
 	&& rm -f /usr/bin/phpize \
@@ -74,6 +75,7 @@ RUN tar -xzvf openresty-1.11.2.5.tar.gz \
 	&& ./configure -j2 --prefix=/usr/local/openresty-1.11.2.5 \
 	&& make -j2 \
 	&& make install
+ADD ./etc/openresty/nginx.conf /usr/local/openresty-1.11.2.5/nginx/conf/nginx.conf
 RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty
 
 RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz
@@ -81,6 +83,6 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& cd redis-3.2.11 \
 	&& make \
 	&& make PREFIX=/usr/local/redis-3.2.11 install \
-	&& mkdir /usr/local/redis-3.2.11/etc/ \
-	&& cp redis.conf /usr/local/redis-3.2.11/etc/redis.conf
+	&& mkdir /usr/local/redis-3.2.11/etc/
+ADD ./redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
