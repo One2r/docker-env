@@ -15,7 +15,7 @@ RUN yum -y remove php* \
 	&& yum -y remove mysql-server mysql \
 	&& yum -y remove php-mysql	
 
-WORKDIR ~/Download	
+WORKDIR /root/Download	
 RUN wget http://au1.php.net/get/php-7.1.12.tar.gz/from/this/mirror -O php-7.1.12.tar.gz
 RUN tar -xzvf php-7.1.12.tar.gz \
 	&& cd php-7.1.12 \ 
@@ -59,6 +59,8 @@ RUN tar -xzvf php-7.1.12.tar.gz \
 	&& make install
 
 ADD ./etc/php/php.ini /usr/local/php-7.1.12/etc/php.ini
+ADD ./etc/php/php-fpm.conf.default /usr/local/php-7.1.12/etc/php-fpm.conf
+ADD ./etc/php/www.conf.default /usr/local/php-7.1.12/etc/php-fpm.d/www.conf
 
 RUN rm -f /usr/bin/php \
 	&& rm -f /usr/bin/phpize \
@@ -87,4 +89,7 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
 
-WORKDIR ~/
+WORKDIR /root/
+ADD ./etc/run.sh ./
+RUN chmod +x run.sh
+CMD /root/run.sh && /bin/bash
