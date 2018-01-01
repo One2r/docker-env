@@ -89,7 +89,13 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
 
+RUN groupadd www \
+	&& useradd -s /sbin/nologin -g www www \
+	&& mkdir -p /data/www \
+	&& chown www:www /data/www -R
+
 WORKDIR /root/
+EXPOSE 80
 ADD ./etc/run.sh ./
 RUN chmod +x run.sh
 CMD /root/run.sh && /bin/bash
