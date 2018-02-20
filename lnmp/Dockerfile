@@ -94,6 +94,33 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
 
+RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz
+RUN tar -xzvf mysql-5.7.20.tar.gz \
+	&& cmake . -DDOWNLOAD_BOOST=1 \
+	-DWITH_BOOST=/usr/local/boost \
+	-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+	-DMYSQL_DATADIR=/usr/local/mysql/data \
+	-DSYSCONFDIR=/usr/local/mysql/etc \
+	-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+    -DWITH_PARTITION_STORAGE_ENGINE=1 \
+    -DWITH_FEDERATED_STORAGE_ENGINE=1 \
+    -DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
+    -DWITH_MYISAM_STORAGE_ENGINE=1 \
+    -DWITH_EMBEDDED_SERVER=1 \
+    -DENABLE_DTRACE=0 \
+    -DENABLED_LOCAL_INFILE=1 \
+    -DDEFAULT_CHARSET=utf8mb4 \
+    -DDEFAULT_COLLATION=utf8mb4_general_ci \
+    -DEXTRA_CHARSETS=all \
+	&& make \
+	&& make install \
+	&& cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld \
+	sed -i "s@^basedir=.*@basedir=/usr/local/mysql@" /etc/init.d/mysqld \
+  	sed -i "s@^datadir=.*@datadir=/usr/local/mysql/data@" /etc/init.d/mysqld \
+	chmod +x /etc/init.d/mysqld
+
+ADD ./etc/redis/redis.conf /usr/local/mysql/etc/redis.conf
+
 RUN groupadd www \
 	&& useradd -s /sbin/nologin -g www www \
 	&& mkdir -p /data/www \
