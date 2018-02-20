@@ -96,6 +96,7 @@ RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
 
 RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz
 RUN tar -xzvf mysql-5.7.20.tar.gz \
+	&& cd mysql-5.7.20 \
 	&& cmake . -DDOWNLOAD_BOOST=1 \
 	-DWITH_BOOST=/usr/local/boost \
 	-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
