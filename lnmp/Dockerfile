@@ -1,8 +1,5 @@
 FROM centos:latest
 
-RUN yum -y install yum-fastestmirror \
- 	&& yum -y update
-
 RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
 	&& rm -rf /etc/localtime \
 	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -106,7 +103,6 @@ RUN tar -xzvf mysql-5.7.20.tar.gz \
     -DWITH_FEDERATED_STORAGE_ENGINE=1 \
     -DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
     -DWITH_MYISAM_STORAGE_ENGINE=1 \
-    -DWITH_EMBEDDED_SERVER=1 \
     -DENABLE_DTRACE=0 \
     -DENABLED_LOCAL_INFILE=1 \
     -DDEFAULT_CHARSET=utf8mb4 \
@@ -114,17 +110,18 @@ RUN tar -xzvf mysql-5.7.20.tar.gz \
     -DEXTRA_CHARSETS=all \
 	&& make -j2 \
 	&& make install \
+	&& mkdir /usr/local/mysql/etc/ \
 	&& cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld \
 	sed -i "s@^basedir=.*@basedir=/usr/local/mysql@" /etc/init.d/mysqld \
   	sed -i "s@^datadir=.*@datadir=/usr/local/mysql/data@" /etc/init.d/mysqld \
-	chmod +x /etc/init.d/mysqld
+	&& chmod +x /etc/init.d/mysqld
 
 ADD ./etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf
 
 RUN groupadd www \
 	&& useradd -s /sbin/nologin -g www www \
-	&& mkdir -p /data/www \
-	&& chown www:www /data/www -R
+	&& groupadd mysql \
+	&& useradd -s /sbin/nologin -g mysql mysql
 
 WORKDIR /root/
 EXPOSE 80
