@@ -68,9 +68,7 @@ RUN ln -s /usr/local/php-7.1.12 /usr/local/php \
 	&& ln -s /usr/local/php/bin/php-config /usr/bin/php-config \
 	&& rm -rf php-7.1.12.tar.gz php-7.1.12
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-	&& php composer-setup.php \
-	&& php -r "unlink('composer-setup.php');" \
+RUN wget https://getcomposer.org/composer.phar -O composer.phar \
 	&& mv composer.phar /usr/local/php/bin/
 
 RUN wget https://openresty.org/download/openresty-1.11.2.5.tar.gz -O openresty-1.11.2.5.tar.gz
