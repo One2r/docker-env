@@ -4,7 +4,7 @@ RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
 	&& rm -rf /etc/localtime \
 	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN for packages in epel-release psmisc vim patch wget  make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz screen rsync libmcrypt-devel ntp net-tools; \
+RUN for packages in epel-release vim wget make cmake gcc gcc-c++ flex bison file libtool libtool-libs kernel-devel libjpeg libjpeg-devel libpng libpng-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel curl curl-devel e2fsprogs e2fsprogs-devel libidn-devel openssl openssl-devel gettext gettext-devel gmp-devel libcap lrzsz libmcrypt-devel ntp net-tools; \
 	do yum -y install $packages; done
 	
 RUN yum -y remove php* \
@@ -65,7 +65,8 @@ RUN rm -f /usr/bin/php \
 RUN ln -s /usr/local/php-7.1.12 /usr/local/php \
 	&& ln -s /usr/local/php/bin/php /usr/bin/php \
 	&& ln -s /usr/local/php/bin/phpize /usr/bin/phpize \
-	&& ln -s /usr/local/php/bin/php-config /usr/bin/php-config
+	&& ln -s /usr/local/php/bin/php-config /usr/bin/php-config \
+	&& rm -rf php-7.1.12.tar.gz php-7.1.12
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 	&& php composer-setup.php \
@@ -79,7 +80,8 @@ RUN tar -xzvf openresty-1.11.2.5.tar.gz \
 	&& make -j2 \
 	&& make install
 ADD ./etc/openresty/nginx.conf /usr/local/openresty-1.11.2.5/nginx/conf/nginx.conf
-RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty
+RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty \
+	&& rm -rf openresty-1.11.2.5.tar.gz openresty-1.11.2.5
 
 RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz
 RUN tar -xzvf redis-3.2.11.tar.gz \
@@ -88,7 +90,8 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& make PREFIX=/usr/local/redis-3.2.11 install \
 	&& mkdir /usr/local/redis-3.2.11/etc/
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
-RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis
+RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis \
+	&& rm -rf redis-3.2.11.tar.gz redis-3.2.11.tar.gz
 
 RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz
 RUN tar -xzvf mysql-5.7.20.tar.gz \
