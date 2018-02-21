@@ -114,9 +114,10 @@ RUN tar -xzvf mysql-5.7.20.tar.gz \
 	&& make -j2 \
 	&& make install \
 	&& mkdir /usr/local/mysql/etc/ \
-	&& cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld \
-	sed -i "s@^basedir=.*@basedir=/usr/local/mysql@" /etc/init.d/mysqld \
-  	sed -i "s@^datadir=.*@datadir=/usr/local/mysql/data@" /etc/init.d/mysqld \
+	&& cp /usr/local/mysql/support-files/mysql.server /etc/init.d \
+	&& mv /etc/init.d/mysql.server /etc/init.d/mysqld \
+	&& sed -i "s@^basedir=.*@basedir=/usr/local/mysql@" /etc/init.d/mysqld \
+  	&& sed -i "s@^datadir=.*@datadir=/usr/local/mysql/data@" /etc/init.d/mysqld \
 	&& chmod +x /etc/init.d/mysqld
 
 ADD ./etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf
