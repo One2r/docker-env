@@ -7,7 +7,7 @@ RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
 	&& rm -rf /etc/localtime \
 	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN for packages in epel-release psmisc vim patch wget  make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz screen rsync libmcrypt-devel ntp net-tools; \
+RUN for packages in epel-release psmisc vim patch wget  make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz screen rsync libmcrypt-devel ntp net-tools; \
 	do yum -y install $packages; done \
 	&& ntpdate -u pool.ntp.org
 	
@@ -55,7 +55,7 @@ RUN tar -xzvf php-7.1.12.tar.gz \
 	--with-gettext \
 	--disable-fileinfo \
 	--enable-opcache \
-	&& make \
+	&& make -j2 \
 	&& make install
 
 ADD ./etc/php/php.ini /usr/local/php-7.1.12/etc/php.ini
@@ -88,7 +88,7 @@ RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty
 RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz
 RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& cd redis-3.2.11 \
-	&& make \
+	&& make -j2 \
 	&& make PREFIX=/usr/local/redis-3.2.11 install \
 	&& mkdir /usr/local/redis-3.2.11/etc/
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
@@ -113,14 +113,14 @@ RUN tar -xzvf mysql-5.7.20.tar.gz \
     -DDEFAULT_CHARSET=utf8mb4 \
     -DDEFAULT_COLLATION=utf8mb4_general_ci \
     -DEXTRA_CHARSETS=all \
-	&& make \
+	&& make -j2 \
 	&& make install \
 	&& cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld \
 	sed -i "s@^basedir=.*@basedir=/usr/local/mysql@" /etc/init.d/mysqld \
   	sed -i "s@^datadir=.*@datadir=/usr/local/mysql/data@" /etc/init.d/mysqld \
 	chmod +x /etc/init.d/mysqld
 
-ADD ./etc/redis/redis.conf /usr/local/mysql/etc/redis.conf
+ADD ./etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf
 
 RUN groupadd www \
 	&& useradd -s /sbin/nologin -g www www \
