@@ -4,7 +4,7 @@ RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
 	&& rm -rf /etc/localtime \
 	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN for packages in epel-release vim wget make cmake gcc gcc-c++ flex bison file libtool libtool-libs kernel-devel libjpeg libjpeg-devel libpng libpng-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel curl curl-devel e2fsprogs e2fsprogs-devel libidn-devel openssl openssl-devel gettext gettext-devel gmp-devel libcap lrzsz libmcrypt-devel ncurses ncurses-devel ntp net-tools; \
+RUN for packages in epel-release vim wget make cmake gcc gcc-c++ flex bison file libtool libtool-libs kernel-devel libjpeg libjpeg-devel libpng libpng-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel curl curl-devel e2fsprogs e2fsprogs-devel libidn-devel openssl openssl-devel gettext gettext-devel gmp-devel libcap lrzsz  ncurses ncurses-devel ntp net-tools; \
 	do yum -y install $packages; done
 	
 RUN yum -y remove php* \
@@ -36,7 +36,6 @@ RUN tar -xzvf php-7.1.12.tar.gz \
 	--with-curl \
 	--enable-mbregex \
 	--enable-mbstring \
-	--with-mcrypt \
 	--enable-ftp \
 	--with-gd \
 	--enable-gd-native-ttf \
