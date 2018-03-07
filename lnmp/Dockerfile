@@ -65,10 +65,11 @@ RUN ln -s /usr/local/php-7.1.12 /usr/local/php \
 	&& ln -s /usr/local/php/bin/php /usr/bin/php \
 	&& ln -s /usr/local/php/bin/phpize /usr/bin/phpize \
 	&& ln -s /usr/local/php/bin/php-config /usr/bin/php-config \
-	&& rm -rf php-7.1.12.tar.gz php-7.1.12
+	&& rm -rf php-7.1.12*
 
 RUN wget https://getcomposer.org/composer.phar -O composer.phar \
-	&& mv composer.phar /usr/local/php/bin/
+	&& mv composer.phar /usr/local/php/bin/ \
+	&& chmod +x /usr/local/php/bin/composer.phar
 
 RUN wget https://openresty.org/download/openresty-1.11.2.5.tar.gz -O openresty-1.11.2.5.tar.gz
 RUN tar -xzvf openresty-1.11.2.5.tar.gz \
@@ -78,7 +79,7 @@ RUN tar -xzvf openresty-1.11.2.5.tar.gz \
 	&& make install
 ADD ./etc/openresty/nginx.conf /usr/local/openresty-1.11.2.5/nginx/conf/nginx.conf
 RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty \
-	&& rm -rf openresty-1.11.2.5.tar.gz openresty-1.11.2.5
+	&& rm -rf openresty-1.11.2.5*
 
 RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz
 RUN tar -xzvf redis-3.2.11.tar.gz \
@@ -88,13 +89,14 @@ RUN tar -xzvf redis-3.2.11.tar.gz \
 	&& mkdir /usr/local/redis-3.2.11/etc/
 ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis \
-	&& rm -rf redis-3.2.11.tar.gz redis-3.2.11.tar.gz
+	&& rm -rf redis-3.2.11*
 
 RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz
+RUN wget http://202.115.33.13/soft/lib/boost/boost_1_59_0.tar.gz -O boost_1_59_0.tar.gz
 RUN tar -xzvf mysql-5.7.20.tar.gz \
+	&& tar -xzvf boost_1_59_0.tar.gz \
 	&& cd mysql-5.7.20 \
-	&& cmake . -DDOWNLOAD_BOOST=1 \
-	-DWITH_BOOST=/usr/local/boost \
+	&& cmake . -DWITH_BOOST=../boost_1_59_0 \
 	-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
 	-DMYSQL_DATADIR=/usr/local/mysql/data \
 	-DSYSCONFDIR=/usr/local/mysql/etc \
@@ -122,10 +124,14 @@ ADD ./etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf
 RUN groupadd www \
 	&& useradd -s /sbin/nologin -g www www \
 	&& groupadd mysql \
-	&& useradd -s /sbin/nologin -g mysql mysql
+	&& useradd -s /sbin/nologin -g mysql mysql \
+	&& /usr/local/mysql/bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data \
+	&& rm -rf mysql-5.7.20* boost_1_59_0*
 
 WORKDIR /root/
 EXPOSE 80
+EXPOSE 3306
+EXPOSE 6379
 ADD ./etc/run.sh ./
 RUN chmod +x run.sh
 CMD /root/run.sh && /bin/bash
