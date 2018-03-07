@@ -1,5 +1,7 @@
 FROM centos:latest
 
+MAINTAINER one2r  1972871083@qq.com
+
 RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
 	&& rm -rf /etc/localtime \
 	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
