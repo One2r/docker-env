@@ -129,7 +129,6 @@ RUN groupadd www \
 	&& useradd -s /sbin/nologin -g mysql mysql \ 
 	&& mkdir /usr/local/mysql/data \
 	&& /usr/local/mysql/bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data \
-	&& chmod 777 -R /usr/local/mysql/data/ \
 	&& rm -rf mysql-5.7.20* boost_1_59_0*
 
 WORKDIR /root/
