@@ -1,2 +1,2 @@
 @echo off
-docker run -it -P -d one2r/lnmp
+docker run -it -v E:\workspace\docker-data:/data -P -d one2r/lnmp
