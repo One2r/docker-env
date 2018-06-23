@@ -14,8 +14,8 @@ RUN yum -y remove php* \
 	&& yum -y remove php-mysql	
 
 WORKDIR /root/Download	
-RUN wget http://au1.php.net/get/php-7.1.12.tar.gz/from/this/mirror -O php-7.1.12.tar.gz
-RUN tar -xzvf php-7.1.12.tar.gz \
+RUN wget http://au1.php.net/get/php-7.1.12.tar.gz/from/this/mirror -O php-7.1.12.tar.gz \
+	&& tar -xzvf php-7.1.12.tar.gz \
 	&& cd php-7.1.12 \ 
 	&& ./configure  \
 	--prefix=/usr/local/php-7.1.12 \
@@ -61,9 +61,8 @@ ADD ./etc/php/www.conf.default /usr/local/php-7.1.12/etc/php-fpm.d/www.conf
 
 RUN rm -f /usr/bin/php \
 	&& rm -f /usr/bin/phpize \
-	&& rm -f /usr/bin/php-config
-
-RUN ln -s /usr/local/php-7.1.12 /usr/local/php \
+	&& rm -f /usr/bin/php-config \
+	&& ln -s /usr/local/php-7.1.12 /usr/local/php \
 	&& ln -s /usr/local/php/bin/php /usr/bin/php \
 	&& ln -s /usr/local/php/bin/phpize /usr/bin/phpize \
 	&& ln -s /usr/local/php/bin/php-config /usr/bin/php-config \
@@ -73,8 +72,8 @@ RUN wget https://getcomposer.org/composer.phar -O composer.phar \
 	&& mv composer.phar /usr/local/php/bin/ \
 	&& chmod +x /usr/local/php/bin/composer.phar
 
-RUN wget https://openresty.org/download/openresty-1.11.2.5.tar.gz -O openresty-1.11.2.5.tar.gz
-RUN tar -xzvf openresty-1.11.2.5.tar.gz \
+RUN wget https://openresty.org/download/openresty-1.11.2.5.tar.gz -O openresty-1.11.2.5.tar.gz \
+	&& tar -xzvf openresty-1.11.2.5.tar.gz \
 	&& cd openresty-1.11.2.5 \
 	&& ./configure -j2 --prefix=/usr/local/openresty-1.11.2.5 \
 	&& make -j2 \
@@ -83,8 +82,8 @@ ADD ./etc/openresty/nginx.conf /usr/local/openresty-1.11.2.5/nginx/conf/nginx.co
 RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty \
 	&& rm -rf openresty-1.11.2.5*
 
-RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz
-RUN tar -xzvf redis-3.2.11.tar.gz \
+RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz \
+	&& tar -xzvf redis-3.2.11.tar.gz \
 	&& cd redis-3.2.11 \
 	&& make -j2 \
 	&& make PREFIX=/usr/local/redis-3.2.11 install \
@@ -93,9 +92,9 @@ ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
 RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis \
 	&& rm -rf redis-3.2.11*
 
-RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz
-RUN wget http://202.115.33.13/soft/lib/boost/boost_1_59_0.tar.gz -O boost_1_59_0.tar.gz
-RUN tar -xzvf mysql-5.7.20.tar.gz \
+RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz \
+	&& wget http://202.115.33.13/soft/lib/boost/boost_1_59_0.tar.gz -O boost_1_59_0.tar.gz  \
+	&& tar -xzvf mysql-5.7.20.tar.gz \
 	&& tar -xzvf boost_1_59_0.tar.gz \
 	&& cd mysql-5.7.20 \
 	&& cmake . -DWITH_BOOST=../boost_1_59_0 \
