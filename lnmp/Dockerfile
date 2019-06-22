@@ -21,6 +21,7 @@ RUN wget http://au1.php.net/get/php-7.1.12.tar.gz/from/this/mirror -O php-7.1.12
 	--prefix=/usr/local/php-7.1.12 \
 	--with-config-file-path=/usr/local/php-7.1.12/etc \
 	--enable-fpm \
+	--with-fpm-systemd \
 	--with-mysqli=mysqlnd \
 	--with-pdo-mysql=mysqlnd \
 	--with-iconv-dir \
@@ -53,7 +54,8 @@ RUN wget http://au1.php.net/get/php-7.1.12.tar.gz/from/this/mirror -O php-7.1.12
 	--disable-fileinfo \
 	--enable-opcache \
 	&& make -j2 \
-	&& make install
+	&& make install \
+	&& cp ./sapi/fpm/php-fpm.service /usr/lib/systemd/system/
 
 ADD ./etc/php/php.ini /usr/local/php-7.1.12/etc/php.ini
 ADD ./etc/php/php-fpm.conf.default /usr/local/php-7.1.12/etc/php-fpm.conf
@@ -69,8 +71,12 @@ RUN rm -f /usr/bin/php \
 	&& rm -rf php-7.1.12*
 
 RUN wget https://getcomposer.org/composer.phar -O composer.phar \
-	&& mv composer.phar /usr/local/php/bin/ \
+	&& mv composer.phar /usr/local/bin/ \
 	&& chmod +x /usr/local/php/bin/composer.phar
+
+RUN wget http://gordalina.github.io/cachetool/downloads/cachetool.phar -O cachetool.phar \
+    && mv cachetool.phar /usr/local/bin/ \
+	&& chmod +x /usr/local/php/bin/cachetool.phar
 
 RUN wget https://openresty.org/download/openresty-1.11.2.5.tar.gz -O openresty-1.11.2.5.tar.gz \
 	&& tar -xzvf openresty-1.11.2.5.tar.gz \
@@ -82,18 +88,22 @@ ADD ./etc/openresty/nginx.conf /usr/local/openresty-1.11.2.5/nginx/conf/nginx.co
 RUN ln -s /usr/local/openresty-1.11.2.5 /usr/local/openresty \
 	&& rm -rf openresty-1.11.2.5*
 
-RUN wget http://download.redis.io/releases/redis-3.2.11.tar.gz -O redis-3.2.11.tar.gz \
-	&& tar -xzvf redis-3.2.11.tar.gz \
-	&& cd redis-3.2.11 \
+RUN wget http://download.redis.io/releases/redis-4.0.12.tar.gz -O redis-4.0.12.tar.gz \
+	&& tar -xzvf redis-4.0.12.tar.gz -C /usr/local \
+	&& cd /usr/local/redis-4.0.12 \
 	&& make -j2 \
-	&& make PREFIX=/usr/local/redis-3.2.11 install \
-	&& mkdir /usr/local/redis-3.2.11/etc/
-ADD ./etc/redis/redis.conf 	/usr/local/redis-3.2.11/etc/redis.conf
-RUN ln -s /usr/local/redis-3.2.11 /usr/local/redis \
-	&& rm -rf redis-3.2.11*
+	&& make install \
+	&& REDIS_PORT=6379 \
+	&& REDIS_CONFIG_FILE=/etc/redis/6379.conf \
+	&& REDIS_LOG_FILE=/var/log/redis_6379.log \
+	&& REDIS_DATA_DIR=/var/lib/redis/6379 \
+	&& REDIS_EXECUTABLE=`command -v redis-server` ./utils/install_server.sh \
+	&& service redis_6379 start
+ADD ./etc/redis/redis.conf 	/etc/redis/redis.conf
+RUN rm -rf redis-4.0.12*
 
 RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.20.tar.gz \
-	&& wget http://202.115.33.13/soft/lib/boost/boost_1_59_0.tar.gz -O boost_1_59_0.tar.gz  \
+	&& wget http://202.115.33.13/soft/lib/boost/boost_1_59_0.tar.gz -O boost_1_59_0.tar.gz \
 	&& tar -xzvf mysql-5.7.20.tar.gz \
 	&& tar -xzvf boost_1_59_0.tar.gz \
 	&& cd mysql-5.7.20 \
@@ -121,6 +131,13 @@ RUN wget http://soft.vpser.net/datebase/mysql/mysql-5.7.20.tar.gz -O mysql-5.7.2
 	&& chmod +x /etc/init.d/mysqld
 
 ADD ./etc/mysql/my.cnf /usr/local/mysql/etc/my.cnf
+
+RUN wget https://github.com/tmux/tmux/releases/download/2.8/tmux-2.8.tar.gz -O tmux-2.8.tar.gz \
+	&& tar -xzvf tmux-2.8.tar.gz \
+	&& cd tmux-2.8 \
+	&& ./configure \
+	&& make && make install \
+	&& rm -rf tmux-2.8*
 
 RUN groupadd www \
 	&& useradd -s /sbin/nologin -g www www \
