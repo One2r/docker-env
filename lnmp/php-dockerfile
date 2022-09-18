@@ -1,0 +1,37 @@
+FROM php:7.4-fpm
+
+LABEL maintainer="1972871083@qq.com"
+
+RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
+	&& rm -rf /etc/localtime \
+	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+RUN apt-get update && apt-get install -y procps \
+    build-essential \
+    zlib1g-dev \
+    unzip \
+    bzip2 \
+    libzip-dev \
+    libbz2-dev \
+    libxml2 \
+    libxml2-dev \
+    libldap2-dev \
+    apt-utils \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    gcc \
+    libonig-dev
+
+RUN /usr/local/bin/docker-php-ext-install gd
+RUN /usr/local/bin/docker-php-ext-install xml
+RUN /usr/local/bin/docker-php-ext-install gettext
+RUN /usr/local/bin/docker-php-ext-install zip
+RUN /usr/local/bin/docker-php-ext-install ldap
+RUN /usr/local/bin/docker-php-ext-install pdo_mysql
+RUN /usr/local/bin/docker-php-ext-install mbstring
+RUN /usr/local/bin/docker-php-ext-install bcmath
+RUN /usr/local/bin/docker-php-ext-install opcache
+
+RUN pecl install http://pecl.php.net/get/redis-5.3.7.tgz && docker-php-ext-enable redis
+
