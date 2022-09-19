@@ -2,9 +2,8 @@ FROM php:7.4-fpm
 
 LABEL maintainer="1972871083@qq.com"
 
-RUN echo 'LANG="en_US.UTF-8"' > /etc/sysconfig/i18n \
-	&& rm -rf /etc/localtime \
-	&& ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ENV LANG C.UTF-8
+ENV TZ=Asia/Shanghai
 
 RUN apt-get update && apt-get install -y procps \
     build-essential \
@@ -34,4 +33,5 @@ RUN /usr/local/bin/docker-php-ext-install bcmath
 RUN /usr/local/bin/docker-php-ext-install opcache
 
 RUN pecl install http://pecl.php.net/get/redis-5.3.7.tgz && docker-php-ext-enable redis
-
+# RUN pecl install http://pecl.php.net/get/psr-1.2.0.tgz && docker-php-ext-enable psr
+# RUN pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz && docker-php-ext-enable phalcon
