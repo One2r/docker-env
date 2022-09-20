@@ -7,21 +7,23 @@ ENV TZ=Asia/Shanghai
 
 RUN apt-get update && apt-get install -y procps \
     build-essential \
-    zlib1g-dev \
     unzip \
     bzip2 \
-    libzip-dev \
-    libbz2-dev \
     libxml2 \
-    libxml2-dev \
-    libldap2-dev \
     apt-utils \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libpng-dev \
     gcc \
-    libonig-dev
-
+	cargo \
+	libjpeg-dev \
+    libpng-dev \
+	libonig-dev \
+	libfreetype6-dev \
+	libbz2-dev \
+	libzip-dev \
+	libldap2-dev \
+	zlib1g-dev \
+	libxml2-dev \
+	libcurl4-openssl-dev
+	
 RUN /usr/local/bin/docker-php-ext-install gd
 RUN /usr/local/bin/docker-php-ext-install xml
 RUN /usr/local/bin/docker-php-ext-install gettext
@@ -33,5 +35,10 @@ RUN /usr/local/bin/docker-php-ext-install bcmath
 RUN /usr/local/bin/docker-php-ext-install opcache
 
 RUN pecl install http://pecl.php.net/get/redis-5.3.7.tgz && docker-php-ext-enable redis
-# RUN pecl install http://pecl.php.net/get/psr-1.2.0.tgz && docker-php-ext-enable psr
-# RUN pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz && docker-php-ext-enable phalcon
+RUN pecl install http://pecl.php.net/get/psr-1.2.0.tgz && docker-php-ext-enable psr
+RUN pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz && docker-php-ext-enable phalcon
+
+ENV CARGO_HOME=/usr
+ENV RUSTUP_HOME=/usr
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN pecl install http://pecl.php.net/get/skywalking-5.0.1.tgz && docker-php-ext-enable skywalking
