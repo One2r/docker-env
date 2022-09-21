@@ -5,21 +5,21 @@ services:
     privileged: true
     volumes:
         - D:\workspace\leidawaimai.com:/usr/share/nginx/html/ldwm:rw
-        - D:\workspace\nginx\conf.d:/etc/nginx/conf.d:rw
-        - D:\workspace\nginx\log:/var/log/nginx:rw
+        - D:\workspace\docker-env\lnmp\etc\nginx\conf.d:/etc/nginx/conf.d:rw
+        - D:\workspace\docker-env\lnmp\log\nginx:/var/log/nginx:rw
     depends_on:
-        - phalcon
+        - php
     networks:
         dev:
-            ipv4_address: 172.32.0.3
+            ipv4_address: 172.32.0.2
     restart: always
     environment:
         - TZ=Asia/Shanghai
     ports:
         - "80:80"
  
-  phalcon:
-    image: 'php7.3-fpm:phalcon'    
+  php:
+    image: 'php:7.4-fpm-phalcon'    
     privileged: true
     volumes:
         - D:\workspace\leidawaimai.com:/www/ldwm:rw
@@ -27,17 +27,16 @@ services:
         - D:\workspace\php\etc\php.ini:/usr/local/etc/php/php.ini:ro
     networks:
         dev:
-            ipv4_address: 172.32.0.2
+            ipv4_address: 172.32.0.3
     restart: always
     environment:
         - TZ=Asia/Shanghai
         
-  
   redis:
     image: 'redis:6'
     privileged: true
     volumes:
-        - D:\workspace\redis\redis.conf:/usr/local/etc/redis/redis.conf:ro
+        - D:\workspace\docker-env\lnmp\etc\redis\redis.conf:/usr/local/etc/redis/redis.conf:ro
     networks:
         dev:
             ipv4_address: 172.32.0.4
