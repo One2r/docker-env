@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y procps \
 	zlib1g-dev \
 	libxml2-dev \
 	libcurl4-openssl-dev
-	
+
 RUN /usr/local/bin/docker-php-ext-install gd
 RUN /usr/local/bin/docker-php-ext-install xml
 RUN /usr/local/bin/docker-php-ext-install gettext
@@ -41,4 +41,5 @@ COPY --from=rust /usr/local/cargo/ /usr/local/cargo
 ENV CARGO_HOME=/usr/local/cargo
 ENV RUSTUP_HOME=/usr/local/cargo
 ENV PATH=/usr/local/cargo/bin:$PATH
+RUN rustup toolchain install stable
 RUN pecl install http://pecl.php.net/get/skywalking-5.0.1.tgz && docker-php-ext-enable skywalking
