@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y procps \
     libxml2 \
     apt-utils \
     gcc \
-	cargo \
 	libjpeg-dev \
     libpng-dev \
 	libonig-dev \
@@ -38,7 +37,8 @@ RUN pecl install http://pecl.php.net/get/redis-5.3.7.tgz && docker-php-ext-enabl
 RUN pecl install http://pecl.php.net/get/psr-1.2.0.tgz && docker-php-ext-enable psr
 RUN pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz && docker-php-ext-enable phalcon
 
-ENV CARGO_HOME=/usr
-ENV RUSTUP_HOME=/usr
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+COPY --from=rust /usr/local/cargo/ /usr/local/cargo
+ENV CARGO_HOME=/usr/local/cargo
+ENV RUSTUP_HOME=/usr/local/cargo
+ENV PATH=/usr/local/cargo/bin:$PATH
 RUN pecl install http://pecl.php.net/get/skywalking-5.0.1.tgz && docker-php-ext-enable skywalking
