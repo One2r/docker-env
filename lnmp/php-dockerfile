@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.4-fpm as builder
 
 LABEL maintainer="1972871083@qq.com"
 
@@ -43,3 +43,30 @@ ENV RUSTUP_HOME=/usr/local/cargo
 ENV PATH=/usr/local/cargo/bin:$PATH
 RUN rustup toolchain install stable
 RUN pecl install http://pecl.php.net/get/skywalking-5.0.1.tgz && docker-php-ext-enable skywalking
+
+from php:7.4-fpm
+
+ENV LANG C.UTF-8
+ENV TZ=Asia/Shanghai
+
+RUN apt-get update && apt-get install -y procps \
+    build-essential \
+    unzip \
+    bzip2 \
+    libxml2 \
+    apt-utils \
+    gcc \
+	libjpeg-dev \
+    libpng-dev \
+	libonig-dev \
+	libfreetype6-dev \
+	libbz2-dev \
+	libzip-dev \
+	libldap2-dev \
+	zlib1g-dev \
+	libxml2-dev \
+	libcurl4-openssl-dev
+	
+
+COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20190902 /usr/local/lib/php/extensions/no-debug-non-zts-20190902
