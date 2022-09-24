@@ -28,6 +28,8 @@ services:
       - ./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./var/log/php:/var/log/php:rw
       - ./data/www:/www:rw
+    external_links:
+      - skywalking-oap-server:skywalking-oap
     networks:
       dev:
         ipv4_address: 172.32.1.3
