@@ -4,9 +4,9 @@ services:
     image: 'nginx:stable'
     privileged: true
     volumes:
-        - D:\workspace\leidawaimai.com:/usr/share/nginx/html/ldwm:rw
-        - ./etc/nginx/conf.d:/etc/nginx/conf.d:rw
+        - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
         - ./var/log/nginx:/var/log/nginx:rw
+        - ./data/www:/usr/share/nginx/html:rw
     depends_on:
         - php
     networks:
@@ -22,12 +22,11 @@ services:
     image: 'php:7.4-fpm-phalcon'    
     privileged: true
     volumes:
-        - D:\workspace\leidawaimai.com:/www/ldwm:rw
-        - D:\workspace\leidawaimai.com\storage:/www/ldwm/storage:rw
         - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
         - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
         - ./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
         - ./var/log/php:/var/log/php:rw
+        - ./data/www:/www:rw
     networks:
         dev:
             ipv4_address: 172.32.1.3
