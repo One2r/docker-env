@@ -13,5 +13,11 @@
 2. 编译 PHP 镜像  
 ```docker build -f php-dockerfile . -t php:7.4-fpm-phalcon```
 
-3. 启动 lnmp compose  
+3. 创建容器网络
+```docker network create --subnet=172.32.1.0/24 dev```
+
+4. 启动 lnmp compose  
 ```docker compose -f ./lnmp-docker-compose.yml up```
+
+5. 启动 skywalking compose  
+``` docker compose -f ./skywalking-docker-compose.yml UP```
