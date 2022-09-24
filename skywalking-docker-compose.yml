@@ -1,4 +1,5 @@
 version: '1'
+name: skywalking
 services:
   skywalking-ui:
     image: 'apache/skywalking-ui'
