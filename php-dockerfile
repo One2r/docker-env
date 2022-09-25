@@ -43,6 +43,12 @@ ENV RUSTUP_HOME=/usr/local/cargo
 ENV PATH=/usr/local/cargo/bin:$PATH
 RUN rustup toolchain install stable
 RUN pecl install http://pecl.php.net/get/skywalking-5.0.1.tgz && docker-php-ext-enable skywalking
+RUN echo "skywalking.enable=On\n" \
+         "skywalking.grpc_address=skywalking-oap:11800\n" \
+         "skywalking.log_enable=1\n" \
+         "skywalking.log_level=debug\n" \
+         "skywalking.error_handler_enable=On\n" \
+         "skywalking.service=php\n" >> /usr/local/etc/php/conf.d/docker-php-ext-skywalking.ini
 
 from php:7.4-fpm
 
@@ -66,7 +72,7 @@ RUN apt-get update && apt-get install -y procps \
 	zlib1g-dev \
 	libxml2-dev \
 	libcurl4-openssl-dev
-	
+
 
 COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20190902 /usr/local/lib/php/extensions/no-debug-non-zts-20190902
