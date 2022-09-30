@@ -36,22 +36,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-        
-  redis:
-    image: 'redis:6'
-    privileged: true
-    volumes:
-      - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./data/redis/:/data:rw
-    networks:
-      dev:
-        ipv4_address: 172.32.1.4
-    restart: always
-    environment:
-      - TZ=Asia/Shanghai
-    ports:
-      - "6379:6379"
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
  
 networks:
   dev:

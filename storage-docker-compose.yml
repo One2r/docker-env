@@ -1,0 +1,38 @@
+version: '1'
+name: storage
+
+services:
+  mysql:
+    image: 'mysql:8'
+    privileged: true
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    networks:
+      dev:
+        ipv4_address: 172.32.1.20
+    ports:
+      - "3306:3306"
+    restart: always
+    
+  redis:
+    image: 'redis:6'
+    privileged: true
+    volumes:
+      - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./data/redis/:/data:rw
+    networks:
+      dev:
+        ipv4_address: 172.32.1.21
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "6379:6379"
+    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+
+networks:
+  dev:
+    external: true
