@@ -1,7 +1,7 @@
 # docker-lnmp
 
 ## 简介
-个人lnmp开发环境dockerfile，线上环境请斟酌使用。
+常用开发环境 docker 配置，线上环境请斟酌使用。
 
 ## 使用
 
