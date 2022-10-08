@@ -71,8 +71,7 @@ RUN apt-get update && apt-get install -y procps \
 	libldap2-dev \
 	zlib1g-dev \
 	libxml2-dev \
-	libcurl4-openssl-dev
-    &&  rm -rf /var/lib/apt/lists/*
+	libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
 
 
 COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
