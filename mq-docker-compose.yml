@@ -2,7 +2,7 @@ version: '1'
 name: mq
 services:
   rabbit:
-    image: 'rabbitmq'
+    image: 'rabbitmq:3-management'
     privileged: true
     networks:
       dev:
