@@ -1,0 +1,20 @@
+version: '1'
+name: mq
+services:
+  rabbit:
+    image: 'rabbitmq'
+    privileged: true
+    networks:
+      dev:
+        ipv4_address: 172.32.1.40
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+    ports:
+      - "15672:15672"
+      
+networks:
+  dev:
+    external: true
