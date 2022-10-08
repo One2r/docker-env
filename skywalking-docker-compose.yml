@@ -9,8 +9,7 @@ services:
     links:
       - skywalking-oap-server
     networks:
-      dev:
-        ipv4_address: 172.32.1.10
+      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -22,8 +21,7 @@ services:
     image: 'apache/skywalking-oap-server'
     privileged: true
     networks:
-      dev:
-        ipv4_address: 172.32.1.11
+      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai

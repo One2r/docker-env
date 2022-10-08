@@ -11,8 +11,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     networks:
-      dev:
-        ipv4_address: 172.32.1.20
+      - dev
     ports:
       - "3306:3306"
     restart: always
@@ -24,8 +23,7 @@ services:
       - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - ./data/redis/:/data:rw
     networks:
-      dev:
-        ipv4_address: 172.32.1.21
+      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai

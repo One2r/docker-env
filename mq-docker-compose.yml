@@ -5,8 +5,7 @@ services:
     image: 'rabbitmq:3-management'
     privileged: true
     networks:
-      dev:
-        ipv4_address: 172.32.1.40
+      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
