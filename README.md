@@ -23,4 +23,4 @@
 ```docker compose -f ./skywalking-docker-compose.yml up```
 
 6. 执行 php cli   
-```docker run -it --rm --name php -v /path/to/project/:/usr/src/myapp -w /usr/src/myapp php:7.4-fpm-phalcon php run```
+```docker run -it --rm --name php -v /path/to/project/:/usr/src/myapp -v /path/to/etc/php/php.ini:/usr/local/etc/php/php.ini -w /usr/src/myapp php:7.4-fpm-phalcon php run```
