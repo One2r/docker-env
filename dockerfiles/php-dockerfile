@@ -1,9 +1,12 @@
-FROM php:7.4-fpm as builder
+FROM composer:latest as composer
+FROM php:7.4-fpm
 
 LABEL maintainer="1972871083@qq.com"
 
-ENV LANG C.UTF-8
-ENV TZ=Asia/Shanghai
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+	TZ=Asia/Shanghai
 
 RUN apt-get update && apt-get install -y procps \
     build-essential \
@@ -23,56 +26,39 @@ RUN apt-get update && apt-get install -y procps \
 	libldap2-dev \
 	zlib1g-dev \
 	libxml2-dev \
-	libcurl4-openssl-dev
+	libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
 
-RUN /usr/local/bin/docker-php-ext-install gd
-RUN /usr/local/bin/docker-php-ext-install xml
-RUN /usr/local/bin/docker-php-ext-install gettext
-RUN /usr/local/bin/docker-php-ext-install zip
-RUN /usr/local/bin/docker-php-ext-install ldap
-RUN /usr/local/bin/docker-php-ext-install pdo_mysql
-RUN /usr/local/bin/docker-php-ext-install mbstring
-RUN /usr/local/bin/docker-php-ext-install bcmath
-RUN /usr/local/bin/docker-php-ext-install opcache
+RUN docker-php-ext-install gd \
+	xml \
+	gettext \
+	zip \
+	ldap \
+	pdo_mysql \
+	mbstring \
+	bcmath \
+	opcache
 
-RUN pecl install redis && docker-php-ext-enable redis
-RUN pecl install psr && docker-php-ext-enable psr
-RUN pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz && docker-php-ext-enable phalcon
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --profile minimal --default-toolchain stable -y
 ENV PATH=/root/.cargo/bin:$PATH
 RUN . /root/.cargo/env
-RUN pecl install skywalking_agent && docker-php-ext-enable skywalking_agent
+
+RUN pecl install redis \
+	psr \
+	skywalking_agent \
+	&& pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz
+	
+RUN docker-php-ext-enable redis \
+	psr \
+	phalcon \
+	skywalking_agent
+
 RUN echo "skywalking_agent.enable=On\n" \
          "skywalking_agent.server_addr=http://skywalking-oap:11800\n" \
          "skywalking_agent.log_level=INFO\n" \
          "skywalking_agent.skywalking_version=9\n" \
          "skywalking_agent.service_name=php\n" >> /usr/local/etc/php/conf.d/docker-php-ext-skywalking_agent.ini
 
-from php:7.4-fpm
-
-ENV LANG C.UTF-8
-ENV TZ=Asia/Shanghai
-
-RUN apt-get update && apt-get install -y procps \
-    build-essential \
-    unzip \
-    bzip2 \
-    libxml2 \
-    apt-utils \
-    gcc \
-	libjpeg-dev \
-    libpng-dev \
-	libonig-dev \
-	libfreetype6-dev \
-	libbz2-dev \
-	libzip-dev \
-	libldap2-dev \
-	zlib1g-dev \
-	libxml2-dev \
-	libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
-
-
-COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
-COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20190902 /usr/local/lib/php/extensions/no-debug-non-zts-20190902
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+
+CMD ["php-fpm"]
