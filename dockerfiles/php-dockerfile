@@ -1,12 +1,7 @@
 FROM composer:latest as composer
-FROM php:7.4-fpm
+FROM php:7.4-fpm as builder
 
 LABEL maintainer="1972871083@qq.com"
-
-ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-	TZ=Asia/Shanghai
 
 RUN apt-get update && apt-get install -y procps \
     build-essential \
@@ -26,7 +21,7 @@ RUN apt-get update && apt-get install -y procps \
 	libldap2-dev \
 	zlib1g-dev \
 	libxml2-dev \
-	libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
+	libcurl4-openssl-dev
 
 RUN docker-php-ext-install gd \
 	xml \
@@ -60,6 +55,30 @@ RUN echo "skywalking_agent.enable=On\n" \
          "skywalking_agent.skywalking_version=9\n" \
          "skywalking_agent.service_name=php\n" >> /usr/local/etc/php/conf.d/docker-php-ext-skywalking_agent.ini
 
+from php:7.4-fpm
+
+RUN apt-get update && apt-get install -y apt-utils \
+    unzip \
+    bzip2 \
+    libxml2 \
+	libjpeg-dev \
+    libpng-dev \
+	libonig-dev \
+	libfreetype6-dev \
+	libbz2-dev \
+	libzip-dev \
+	libldap2-dev \
+	zlib1g-dev \
+	libxml2-dev \
+	libcurl4-openssl-dev && rm -rf /var/lib/apt/lists/*
+    
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+	TZ=Asia/Shanghai
+
+COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20190902 /usr/local/lib/php/extensions/no-debug-non-zts-20190902
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
 CMD ["php-fpm"]
