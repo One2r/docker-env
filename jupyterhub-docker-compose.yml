@@ -1,0 +1,21 @@
+version: '1'
+name: jupyterhub
+services:
+  jupyter:
+     image: 'jupyterhub/jupyterhub'
+     privileged: true
+     volumes:
+       - ./etc/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
+       - ./data/jupyterhub:/srv/jupyterhub/data:rw
+     networks:
+       - dev
+     restart: always
+     environment:
+       - TZ=Asia/Shanghai
+     ports:
+       - "8000:8000"
+       
+       
+networks:
+  dev:
+    external: true
