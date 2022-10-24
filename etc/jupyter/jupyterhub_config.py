@@ -12,7 +12,7 @@ def pre_spawn_hook(spawner):
 
 c.Spawner.args = ['--allow-root']
 c.Spawner.pre_spawn_hook = pre_spawn_hook
-c.Spawner.notebook_dir = '~/jupyterhub'
+c.Spawner.notebook_dir = '/srv/jupyterhub/data'
 c.JupyterHub.allow_named_servers = True
 c.LocalAuthenticator.create_system_users = True
 
