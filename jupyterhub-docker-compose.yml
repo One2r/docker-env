@@ -2,11 +2,11 @@ version: '1'
 name: jupyterhub
 services:
   jupyter:
-     image: 'jupyterhub/jupyterhub'
+     image: 'jupyterhub:oauth'
      privileged: true
      volumes:
        - ./etc/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
-       - ./data/jupyterhub:/srv/jupyterhub/data:rw
+       - ./data/jupyterhub:/root/data:rw
      networks:
        - dev
      restart: always
