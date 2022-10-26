@@ -11,9 +11,9 @@
 2. ```cd docker-env```
 
 2. 编译镜像  
-    - PHP 镜像
+    - PHP 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/php-dockerfile . -t php:7.4-fpm-phalcon```
-    - jupyterhub 镜像 
+    - jupyterhub 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-oauth-dockerfile . -t jupyterhub:oauth```
 
 3. 创建容器网络   
@@ -26,4 +26,8 @@
 ```docker compose -f ./skywalking-docker-compose.yml up```
 
 6. 执行 php cli   
-```docker run -it --rm --name php -v /path/to/project/:/usr/src/myapp -v /path/to/etc/php/php.ini:/usr/local/etc/php/php.ini -w /usr/src/myapp php:7.4-fpm-phalcon php run```
+```
+docker exec -it 97cfa2be2b0c /bin/bash 
+cd /www/
+php run
+```
