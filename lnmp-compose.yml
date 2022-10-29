@@ -6,6 +6,7 @@ services:
     privileged: true
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./etc/nginx/cert:/etc/nginx/cert:ro
       - ./var/log/nginx:/var/log/nginx:rw
       - ./data/www:/usr/share/nginx/html:rw
     depends_on:
@@ -17,6 +18,7 @@ services:
       - TZ=Asia/Shanghai
     ports:
       - "80:80"
+      - "443:443"
  
   php:
     image: 'php:7.4-fpm-phalcon'    
