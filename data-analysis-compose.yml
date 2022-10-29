@@ -12,6 +12,10 @@ services:
      restart: always
      environment:
        - TZ=Asia/Shanghai
+#       - GITLAB_HOST=https://gitlab.com
+#       - OAUTH_CALLBACK_URL=https://www.yourdomain.com/hub/oauth_callback
+#       - OAUTH_CLIENT_ID=b8312c7666acc33cf1263866cbd9bd72
+#       - OAUTH_CLIENT_SECRET=1de38bad6cbd021c76afecbf7e336941
      ports:
        - "8000:8000"
        
