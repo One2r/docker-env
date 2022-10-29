@@ -41,11 +41,13 @@ RUN . /root/.cargo/env
 RUN pecl install redis \
 	psr \
 	skywalking_agent \
+    yaf \
 	&& pecl install http://pecl.php.net/get/phalcon-4.1.2.tgz
 	
 RUN docker-php-ext-enable redis \
 	psr \
 	phalcon \
+    yaf \
 	skywalking_agent
 
 RUN echo "skywalking_agent.enable=On\n" \
