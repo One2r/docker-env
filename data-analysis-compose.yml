@@ -1,5 +1,5 @@
 version: '1'
-name: jupyterhub
+name: data-analysis
 services:
   jupyter:
      image: 'jupyterhub:oauth'
