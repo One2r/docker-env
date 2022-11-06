@@ -12,7 +12,7 @@
 
 2. 编译镜像  
     - PHP 镜像  
-    ```docker build --force-rm=true -f ./dockerfiles/php-dockerfile . -t php:7.4-fpm-my```
+    ```docker build --force-rm=true -f ./dockerfiles/php-dockerfile . -t php:my-7.4-fpm```
     - jupyterhub 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:oauth```
 
