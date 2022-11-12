@@ -2,7 +2,7 @@ version: '1'
 name: data-analysis
 services:
   jupyter:
-     image: 'jupyterhub:oauth'
+     image: 'jupyterhub:my-jupyterhub'
      privileged: true
      volumes:
        - ./etc/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro

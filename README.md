@@ -14,7 +14,7 @@
     - PHP 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/php-dockerfile . -t php:my-7.4-fpm```
     - jupyterhub 镜像  
-    ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:oauth```
+    ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
 
 3. 创建容器网络   
 ```docker network create --subnet=172.32.1.0/24 dev```
