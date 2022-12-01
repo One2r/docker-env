@@ -20,6 +20,6 @@ services:
        - "8000:8000"
        
        
-networks:
-  dev:
-    external: true
+#networks:
+#  dev:
+#    external: true

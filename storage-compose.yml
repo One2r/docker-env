@@ -31,6 +31,6 @@ services:
       - "6379:6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-networks:
-  dev:
-    external: true
+#networks:
+#  dev:
+#    external: true

@@ -37,6 +37,6 @@ services:
     environment:
       - TZ=Asia/Shanghai
  
-networks:
-  dev:
-    external: true
+#networks:
+#  dev:
+#    external: true
