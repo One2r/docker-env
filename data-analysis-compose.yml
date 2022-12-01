@@ -7,8 +7,8 @@ services:
      volumes:
        - ./etc/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
        - ./data/jupyterhub:/root/data:rw
-#     networks:
-#       - dev
+     networks:
+       - dev
      restart: always
      environment:
        - TZ=Asia/Shanghai
@@ -20,6 +20,6 @@ services:
        - "8000:8000"
        
        
-#networks:
-#  dev:
-#    external: true
+networks:
+  dev:
+    external: true

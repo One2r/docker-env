@@ -10,8 +10,8 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-#    networks:
-#      - dev
+    networks:
+      - dev
     ports:
       - "3306:3306"
     restart: always
@@ -22,8 +22,8 @@ services:
     volumes:
       - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - ./data/redis/:/data:rw
-#    networks:
-#      - dev
+    networks:
+      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -31,6 +31,6 @@ services:
       - "6379:6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-#networks:
-#  dev:
-#    external: true
+networks:
+  dev:
+    external: true
