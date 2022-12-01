@@ -11,8 +11,8 @@ services:
       - ./data/www:/usr/share/nginx/html:rw
     depends_on:
       - php
-    networks:
-      - dev
+#    networks:
+#      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -31,8 +31,9 @@ services:
       - ./data/www:/www:rw
     external_links:
       - skywalking-oap-server:skywalking-oap
-    networks:
-      - dev
+      - redis:redis
+#    networks:
+#      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai

@@ -4,8 +4,8 @@ services:
   rabbit:
     image: 'rabbitmq:3-management'
     privileged: true
-    networks:
-      - dev
+#    networks:
+#      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
