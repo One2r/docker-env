@@ -1,4 +1,4 @@
-# docker-lnmp
+# docker-env
 
 ## 简介
 常用开发环境 docker 配置，线上环境请斟酌使用。
