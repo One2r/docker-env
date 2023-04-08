@@ -19,13 +19,15 @@
 3. 创建容器网络   
 ```docker network create --subnet=172.32.1.0/24 dev```   
 
-4. 启动 lnmp compose  
+4. 编辑 ```.ENV```，修改数据目录和工作代码目录
+
+5. 启动 lnmp compose  
 ```docker compose -f ./lnmp-docker-compose.yml up```
 
-5. 启动 skywalking compose  
+6. 启动 skywalking compose  
 ```docker compose -f ./skywalking-docker-compose.yml up```
 
-6. 执行 php cli   
+7. 执行 php cli   
 ```
 docker exec -it 97cfa2be2b0c /bin/bash 
 cd /www/

@@ -6,7 +6,7 @@ services:
     image: 'mysql:8'
     privileged: true
     volumes:
-      - ./data/mysql:/var/lib/mysql:rw
+      - $DATA_DIR/mysql:/var/lib/mysql:rw
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: 123456
@@ -21,7 +21,7 @@ services:
     privileged: true
     volumes:
       - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./data/redis/:/data:rw
+      - $DATA_DIR/redis/:/data:rw
     networks:
       - dev
     restart: always
