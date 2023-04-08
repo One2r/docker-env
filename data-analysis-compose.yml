@@ -6,7 +6,7 @@ services:
      privileged: true
      volumes:
        - ./etc/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
-       - ./data/jupyterhub:/root/data:rw
+       - ./workspace/jupyterhub:/root/workspace:rw
      networks:
        - dev
      restart: always
