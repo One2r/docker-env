@@ -8,7 +8,7 @@ services:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./etc/nginx/cert:/etc/nginx/cert:ro
       - ./var/log/nginx:/var/log/nginx:rw
-      - $WORKSPACE_DIR:/usr/share/nginx/html:rw
+      - $WORKSPACE_DIR/www:/usr/share/nginx/html:rw
     depends_on:
       - php
     networks:
@@ -28,7 +28,7 @@ services:
       - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
       - ./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./var/log/php:/var/log/php:rw
-      - $WORKSPACE_DIR:/www:rw
+      - $WORKSPACE_DIR/www:/www:rw
     external_links:
       - skywalking-oap-server:skywalking-oap
       - redis:redis

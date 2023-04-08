@@ -19,7 +19,7 @@
 3. 创建容器网络   
 ```docker network create --subnet=172.32.1.0/24 dev```   
 
-4. 编辑 ```.ENV```，修改数据目录和工作代码目录
+4. ```cp .ENV.example .ENV```，编辑 ```.ENV```，修改数据目录和工作代码目录
 
 5. 启动 lnmp compose  
 ```docker compose -f ./lnmp-docker-compose.yml up```
