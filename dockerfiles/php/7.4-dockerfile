@@ -57,7 +57,7 @@ RUN echo "skywalking_agent.enable=On\n" \
          "skywalking_agent.skywalking_version=9\n" \
          "skywalking_agent.service_name=php\n" >> /usr/local/etc/php/conf.d/docker-php-ext-skywalking_agent.ini
 
-from php:7.4-fpm
+FROM php:7.4-fpm
 
 RUN apt-get update && apt-get install -y apt-utils \
     unzip \
