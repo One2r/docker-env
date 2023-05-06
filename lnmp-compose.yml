@@ -6,6 +6,7 @@ services:
     privileged: true
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./etc/nginx/ip:/etc/nginx/ip:ro
       - ./etc/nginx/cert:/etc/nginx/cert:ro
       - ./var/log/nginx:/var/log/nginx:rw
       - $WORKSPACE_DIR/www:/usr/share/nginx/html:rw
