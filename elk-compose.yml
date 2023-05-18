@@ -1,0 +1,31 @@
+version: '1'
+name: elk
+services:
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana'
+    privileged: true
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch'
+    privileged: true
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+        
+networks:
+  dev:
+    external: true
