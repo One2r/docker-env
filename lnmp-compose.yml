@@ -1,12 +1,32 @@
 version: '1'
 name: lnmp
 services:
+  waf:
+    image: 'openresty:waf'
+    privileged: true
+    volumes:
+      - ./etc/waf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./etc/waf/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
+      - ./etc/waf/conf.d:/etc/nginx/conf.d:ro
+      - ./etc/waf/waf:/etc/nginx/waf:ro
+      - ./etc/waf/ip:/etc/nginx/ip:ro
+      - ./etc/waf/cert:/etc/nginx/cert:ro
+    depends_on:
+      - nginx
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "80:80"
+      - "443:443"
+
   nginx:
     image: 'nginx:stable'
     privileged: true
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./etc/nginx/ip:/etc/nginx/ip:ro
       - ./etc/nginx/cert:/etc/nginx/cert:ro
       - ./var/log/nginx:/var/log/nginx:rw
       - $WORKSPACE_DIR/www:/usr/share/nginx/html:rw
@@ -17,9 +37,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-    ports:
-      - "80:80"
-      - "443:443"
  
   php:
     image: 'php:my-7.4-fpm'
