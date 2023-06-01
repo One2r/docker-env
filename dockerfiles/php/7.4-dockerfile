@@ -3,7 +3,7 @@ FROM php:7.4-fpm as builder
 
 LABEL maintainer="1972871083@qq.com"
 
-RUN apt-get update && apt-get install -y procps \
+RUN apt-get update && apt-get install -y --no-install-recommends procps \
     build-essential \
     unzip \
     bzip2 \
@@ -59,7 +59,7 @@ RUN echo "skywalking_agent.enable=On\n" \
 
 FROM php:7.4-fpm
 
-RUN apt-get update && apt-get install -y apt-utils \
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils \
     unzip \
     bzip2 \
     libxml2 \

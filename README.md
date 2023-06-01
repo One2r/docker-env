@@ -15,6 +15,8 @@
     ```docker build --force-rm=true -f ./dockerfiles/php/7.4-dockerfile . -t php:my-7.4-fpm```
     - jupyterhub 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
+    - openresty waf 镜像   
+    ```docker build --force-rm=true -f ./dockerfiles/waf-dockerfile . -t openresty:waf```
 
 3. 创建容器网络   
 ```docker network create --subnet=192.168.1.0/24 dev```   
