@@ -9,10 +9,15 @@ services:
       - ./etc/waf/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
       - ./etc/waf/conf.d:/etc/nginx/conf.d:ro
       - ./etc/waf/waf:/etc/nginx/waf:ro
-      - ./etc/waf/ip:/etc/nginx/ip:ro
       - ./etc/waf/cert:/etc/nginx/cert:ro
+      - ./etc/ip:/etc/nginx/ip:ro
+      - ./var/log/waf/nginx:/usr/local/openresty/nginx/logs:rw
+      - ./var/log/waf/modsecurity:/var/log/modsecurity:rw
     depends_on:
       - nginx
+    external_links:
+      - storage-redis-1:redis
+      - docker-elk-elasticsearch-1:elasticsearch
     networks:
       - dev
     restart: always
@@ -48,8 +53,9 @@ services:
       - ./var/log/php:/var/log/php:rw
       - $WORKSPACE_DIR/www:/www:rw
     external_links:
-      - skywalking-oap-server:skywalking-oap
-      - redis:redis
+      - skywalking-oap-server-1:skywalking-oap
+      - storage-redis-1:redis
+      - storage-mysql-1:mysql
     networks:
       - dev
     restart: always
