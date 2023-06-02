@@ -17,6 +17,8 @@
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
     - openresty waf 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/waf-dockerfile . -t openresty:waf```
+    - redis with plugin 镜像   
+    ```docker build --force-rm=true -f ./dockerfiles/redis-dockerfile . -t redis:6-with-plugin```
 
 3. 创建容器网络   
 ```docker network create --subnet=192.168.1.0/24 dev```   

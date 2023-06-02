@@ -1,0 +1,8 @@
+FROM redis:6
+
+LABEL maintainer="1972871083@qq.com"
+
+COPY --from=redislabs/rebloom /usr/lib/redis/modules/redisbloom.so /usr/local/etc/redis/modules/redisbloom.so
+
+EXPOSE 6379
+CMD ["redis-server"]

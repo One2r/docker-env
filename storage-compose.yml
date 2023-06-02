@@ -17,7 +17,7 @@ services:
     restart: always
     
   redis:
-    image: 'redis:6'
+    image: 'redis:6-with-plugin'
     privileged: true
     volumes:
       - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
