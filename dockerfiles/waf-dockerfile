@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends procps \
     libtool \
     libxml2-dev \
     libyajl-dev \
+    libcurl4-openssl-dev \
     pkgconf \
     wget \
     zlib1g-dev \
@@ -72,6 +73,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends procps \
     libxml2-dev \
     libyajl-dev \
     zlib1g-dev \
+    libcurl4-openssl-dev \
     lua5.4 \
     liblua5.4-dev \
     libssl-dev && rm -rf /var/lib/apt/lists/*
