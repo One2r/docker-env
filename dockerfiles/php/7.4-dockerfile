@@ -51,7 +51,7 @@ RUN docker-php-ext-enable redis \
 	skywalking_agent
 
 RUN echo "skywalking_agent.enable=On\n" \
-         "skywalking_agent.server_addr=http://skywalking-oap:11800\n" \
+         "skywalking_agent.server_addr=skywalking-oap:11800\n" \
 		 "skywalking_agent.log_file=/var/log/php/skywalking_agent.log\n" \
          "skywalking_agent.log_level=INFO\n" \
          "skywalking_agent.skywalking_version=9\n" \
