@@ -26,12 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends procps \
     git \
     g++ \
     clang \
-    lua5.4 \
-    liblua5.4-dev \
     libssl-dev
 
 ENV LUAJIT_LIB="/usr/local/openresty/luajit/lib/"
 ENV LUAJIT_INC="/tmp/openresty-1.21.4.1/bundle/LuaJIT-2.1-20220411/src/"
+ENV PKG_CONFIG_PATH="/usr/local/openresty/luajit/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 RUN cd /tmp \
     && wget https://github.com/maxmind/libmaxminddb/releases/download/1.7.1/libmaxminddb-1.7.1.tar.gz \
@@ -48,6 +47,8 @@ RUN cd /tmp \
     && git submodule init \
     && git submodule update \
     && sh build.sh \
+    && sed -i 's/^LUA_POSSIBLE_LIB_NAMES=\".*\"/LUA_POSSIBLE_LIB_NAMES=\"luajit\"/g' configure \
+    && sed -i 's/^LUA_POSSIBLE_PATHS=\".*\"/LUA_POSSIBLE_PATHS=\"\/usr\/local\/openresty\/luajit"/g' configure \
     && ./configure --prefix=/usr/local/modsecurity --with-yajl --with-maxmind=/usr/local/libmaxminddb \
     && make -j2 \
     && make install \
@@ -67,16 +68,14 @@ ARG RESTY_VERSION="1.21.4.1"
 
 RUN apt-get update && apt-get install -y --no-install-recommends procps \
     build-essential \
-    libgeoip-dev \
-    liblmdb-dev \
-    libpcre3-dev \
-    libxml2-dev \
-    libyajl-dev \
-    zlib1g-dev \
-    libcurl4-openssl-dev \
-    lua5.4 \
-    liblua5.4-dev \
-    libssl-dev && rm -rf /var/lib/apt/lists/*
+    libgeoip1 \
+    liblmdb0 \
+    libpcre3 \
+    libxml2 \
+    libyajl2 \
+    zlib1g \
+    libcurl4 \
+    libssl1.1 && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/local/libmaxminddb /usr/local/libmaxminddb
 COPY --from=builder /usr/local/modsecurity /usr/local/modsecurity
@@ -84,6 +83,7 @@ COPY --from=builder /tmp/openresty-${RESTY_VERSION}/bundle/nginx-1.21.4/objs/ngx
 
 RUN echo /usr/local/libmaxminddb/lib  >> /etc/ld.so.conf.d/local.conf \
     && echo /usr/local/modsecurity/lib  >> /etc/ld.so.conf.d/local.conf \
+    && echo /usr/local/openresty/luajit/lib  >> /etc/ld.so.conf.d/local.conf \
     && ldconfig
 
 CMD ["/usr/bin/openresty", "-g", "daemon off;"]
