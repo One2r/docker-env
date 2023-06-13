@@ -55,6 +55,7 @@ RUN cd /tmp \
     && cd /tmp \
     && wget https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz \
     && tar -xzvf modsecurity-nginx-v1.0.3.tar.gz \
+    && sed -i '/$ngx_module_name \\/a\ngx_http_lua_module \\' ./modsecurity-nginx-v1.0.3/config \
     && wget https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz \
     && tar -xzvf openresty-${RESTY_VERSION}.tar.gz \
     && cd openresty-${RESTY_VERSION}/bundle/nginx-1.21.4 \

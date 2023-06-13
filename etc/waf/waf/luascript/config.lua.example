@@ -1,0 +1,5 @@
+local config = ngx.shared.config
+
+config:set("redis-host", "changeme")
+config:set("redis-port", 6379)
+config:set("redis-password", "changeme")
