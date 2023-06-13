@@ -67,8 +67,7 @@ FROM openresty/openresty:${RESTY_VERSION}-${RESTY_IMAGE_TAG}
 
 ARG RESTY_VERSION="1.21.4.1"
 
-RUN apt-get update && apt-get install -y --no-install-recommends procps \
-    build-essential \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libgeoip1 \
     liblmdb0 \
     libpcre3 \
