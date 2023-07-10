@@ -11,14 +11,14 @@ local ok, err = red:connect(config:get("redis-host"), config:get("redis-port"))
 if not ok then
     ngx.log(ngx.ERR, "Failed to connect redis: ",err)
     red:close()
-    ngx.exec("@proxy-with-waf");
+    ngx.exec("@proxy-with-waf")
 end
 
 local ok, err = red:auth(config:get("redis-password"))
 if not ok then
     ngx.log(ngx.ERR, "Failed to authenticate redis: ",err)
     red:close()
-    ngx.exec("@proxy-with-waf");
+    ngx.exec("@proxy-with-waf")
 end
 
 local ip = ngx.var.remote_addr
@@ -28,7 +28,7 @@ local res, err = red:cf():exists("waf:ip:blacklist",ip)
 if not res then
     ngx.log(ngx.ERR, "Failed to execute cf.exists for blacklist: ",err)
     red:set_keepalive(10000, 100)
-    ngx.exec("@proxy-with-waf");
+    ngx.exec("@proxy-with-waf")
 end
 
 if res == 1 then
@@ -43,11 +43,11 @@ red:set_keepalive(10000, 100)
 
 if not res then
     ngx.log(ngx.ERR, "Failed to execute cf.exists for whitelist: ",err)
-    ngx.exec("@proxy-with-waf");
+    ngx.exec("@proxy-with-waf")
 end
 
 if res == 0 then
-    ngx.exec("@proxy-with-waf");
+    ngx.exec("@proxy-with-waf")
 else
-    ngx.exec("@proxy");
+    ngx.exec("@proxy")
 end
