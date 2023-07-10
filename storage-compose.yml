@@ -3,7 +3,7 @@ name: storage
 
 services:
   mysql:
-    image: 'mysql:8'
+    image: 'mysql:latest'
     privileged: true
     volumes:
       - $DATA_DIR/mysql:/var/lib/mysql:rw
