@@ -1,18 +1,18 @@
 version: '1'
 name: lnmp
 services:
-  waf:
-    image: 'openresty:waf'
+  gateway:
+    image: 'openresty:gateway'
     privileged: true
     volumes:
-      - ./etc/waf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
-      - ./etc/waf/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
-      - ./etc/waf/conf.d:/etc/nginx/conf.d:ro
-      - ./etc/waf/waf:/etc/nginx/waf:ro
-      - ./etc/waf/cert:/etc/nginx/cert:ro
+      - ./etc/gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./etc/gateway/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
+      - ./etc/gateway/conf.d:/etc/nginx/conf.d:ro
+      - ./etc/gateway/waf:/etc/nginx/waf:ro
+      - ./etc/gateway/cert:/etc/nginx/cert:ro
       - ./etc/ip:/etc/nginx/ip:ro
-      - ./var/log/waf/nginx:/usr/local/openresty/nginx/logs:rw
-      - ./var/log/waf/modsecurity:/var/log/modsecurity:rw
+      - ./var/log/gateway/nginx:/usr/local/openresty/nginx/logs:rw
+      - ./var/log/gateway/modsecurity:/var/log/modsecurity:rw
     depends_on:
       - nginx
     external_links:

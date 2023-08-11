@@ -1,0 +1,89 @@
+ARG RESTY_VERSION="1.21.4.1"
+ARG RESTY_IMAGE_TAG="bullseye"
+
+FROM openresty/openresty:${RESTY_VERSION}-${RESTY_IMAGE_TAG} as builder
+
+ARG RESTY_VERSION="1.21.4.1"
+
+LABEL maintainer="1972871083@qq.com"
+
+RUN apt-get update && apt-get install -y --no-install-recommends procps \
+    build-essential \
+    apt-utils \
+    autoconf \
+    automake \
+    libgeoip-dev \
+    liblmdb-dev \
+    libpcre3-dev \
+    libtool \
+    libxml2-dev \
+    libyajl-dev \
+    libcurl4-openssl-dev \
+    pkgconf \
+    wget \
+    zlib1g-dev \
+    gcc \
+    git \
+    g++ \
+    clang \
+    libssl-dev
+
+ENV LUAJIT_LIB="/usr/local/openresty/luajit/lib/"
+ENV LUAJIT_INC="/tmp/openresty-1.21.4.1/bundle/LuaJIT-2.1-20220411/src/"
+ENV PKG_CONFIG_PATH="/usr/local/openresty/luajit/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+RUN cd /tmp \
+    && wget https://github.com/maxmind/libmaxminddb/releases/download/1.7.1/libmaxminddb-1.7.1.tar.gz \
+    && tar -xzvf libmaxminddb-1.7.1.tar.gz \
+    && cd libmaxminddb-1.7.1 \
+    && ./configure --prefix=/usr/local/libmaxminddb \
+    && make -j2 \
+    && make install \
+    && echo /usr/local/libmaxminddb/lib  >> /etc/ld.so.conf.d/local.conf \
+    && ldconfig \
+    && cd /tmp \
+    && git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity \
+    && cd ModSecurity \
+    && git submodule init \
+    && git submodule update \
+    && sh build.sh \
+    && sed -i 's/^LUA_POSSIBLE_LIB_NAMES=\".*\"/LUA_POSSIBLE_LIB_NAMES=\"luajit\"/g' configure \
+    && sed -i 's/^LUA_POSSIBLE_PATHS=\".*\"/LUA_POSSIBLE_PATHS=\"\/usr\/local\/openresty\/luajit"/g' configure \
+    && ./configure --prefix=/usr/local/modsecurity --with-yajl --with-maxmind=/usr/local/libmaxminddb \
+    && make -j2 \
+    && make install \
+    && cd /tmp \
+    && wget https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz \
+    && tar -xzvf modsecurity-nginx-v1.0.3.tar.gz \
+    && sed -i '/$ngx_module_name \\/a\ngx_http_lua_module \\' ./modsecurity-nginx-v1.0.3/config \
+    && wget https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz \
+    && tar -xzvf openresty-${RESTY_VERSION}.tar.gz \
+    && cd openresty-${RESTY_VERSION}/bundle/nginx-1.21.4 \
+    && COMPILEOPTIONS=$(/usr/local/openresty/bin/openresty -V 2>&1|grep -i "arguments"|cut -d ":" -f2-) \
+    && eval ./configure $COMPILEOPTIONS --add-dynamic-module=/tmp/modsecurity-nginx-v1.0.3 \
+    && make modules -j2 
+
+FROM openresty/openresty:${RESTY_VERSION}-${RESTY_IMAGE_TAG}
+
+ARG RESTY_VERSION="1.21.4.1"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgeoip1 \
+    liblmdb0 \
+    libpcre3 \
+    libxml2 \
+    libyajl2 \
+    zlib1g \
+    libcurl4 \
+    libssl1.1 && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /usr/local/libmaxminddb /usr/local/libmaxminddb
+COPY --from=builder /usr/local/modsecurity /usr/local/modsecurity
+COPY --from=builder /tmp/openresty-${RESTY_VERSION}/bundle/nginx-1.21.4/objs/ngx_http_modsecurity_module.so /usr/local/openresty/nginx/modules/ngx_http_modsecurity_module.so
+
+RUN echo /usr/local/libmaxminddb/lib  >> /etc/ld.so.conf.d/local.conf \
+    && echo /usr/local/modsecurity/lib  >> /etc/ld.so.conf.d/local.conf \
+    && echo /usr/local/openresty/luajit/lib  >> /etc/ld.so.conf.d/local.conf \
+    && ldconfig
+
+CMD ["/usr/bin/openresty", "-g", "daemon off;"]

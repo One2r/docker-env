@@ -16,7 +16,7 @@
     - jupyterhub 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
     - openresty waf 镜像   
-    ```docker build --force-rm=true -f ./dockerfiles/waf-dockerfile . -t openresty:waf```
+    ```docker build --force-rm=true -f ./dockerfiles/gateway-dockerfile . -t openresty:gateway```
     - redis with plugin 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/redis-dockerfile . -t redis:6-with-plugin```
 
