@@ -7,10 +7,12 @@ services:
     volumes:
       - ./etc/gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - ./etc/gateway/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
+      - ./etc/gateway/init.lua:/usr/local/openresty/nginx/conf/init.lua:ro
+      - ./etc/gateway/waf:/usr/local/openresty/nginx/waf:ro
+      - ./etc/gateway/circuitbreaker:/usr/local/openresty/nginx/circuitbreaker:ro
+      - ./etc/gateway/cert:/usr/local/openresty/nginx/cert:ro
+      - ./etc/ip:/usr/local/openresty/nginx/ip:ro
       - ./etc/gateway/conf.d:/etc/nginx/conf.d:ro
-      - ./etc/gateway/waf:/etc/nginx/waf:ro
-      - ./etc/gateway/cert:/etc/nginx/cert:ro
-      - ./etc/ip:/etc/nginx/ip:ro
       - ./var/log/gateway/nginx:/usr/local/openresty/nginx/logs:rw
       - ./var/log/gateway/modsecurity:/var/log/modsecurity:rw
     depends_on:
