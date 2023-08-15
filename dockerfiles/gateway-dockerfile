@@ -1,11 +1,13 @@
-ARG RESTY_VERSION="1.21.4.1"
+ARG RESTY_NGINX_VERSION="1.21.4"
+ARG RESTY_SUB_VERSION="2"
+
+ARG RESTY_VERSION="${RESTY_NGINX_VERSION}.${RESTY_SUB_VERSION}"
 ARG RESTY_IMAGE_TAG="bullseye"
 
 FROM openresty/openresty:${RESTY_VERSION}-${RESTY_IMAGE_TAG} as builder
 
-ARG RESTY_VERSION="1.21.4.1"
-
-LABEL maintainer="1972871083@qq.com"
+ARG RESTY_NGINX_VERSION
+ARG RESTY_VERSION
 
 RUN apt-get update && apt-get install -y --no-install-recommends procps \
     build-essential \
@@ -29,7 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends procps \
     libssl-dev
 
 ENV LUAJIT_LIB="/usr/local/openresty/luajit/lib/"
-ENV LUAJIT_INC="/tmp/openresty-1.21.4.1/bundle/LuaJIT-2.1-20220411/src/"
+ENV LUAJIT_INC="/tmp/openresty-${RESTY_VERSION}/bundle/LuaJIT-2.1-20230410/src/"
 ENV PKG_CONFIG_PATH="/usr/local/openresty/luajit/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 RUN cd /tmp \
@@ -58,14 +60,17 @@ RUN cd /tmp \
     && sed -i '/$ngx_module_name \\/a\ngx_http_lua_module \\' ./modsecurity-nginx-v1.0.3/config \
     && wget https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz \
     && tar -xzvf openresty-${RESTY_VERSION}.tar.gz \
-    && cd openresty-${RESTY_VERSION}/bundle/nginx-1.21.4 \
+    && cd openresty-${RESTY_VERSION}/bundle/nginx-${RESTY_NGINX_VERSION} \
     && COMPILEOPTIONS=$(/usr/local/openresty/bin/openresty -V 2>&1|grep -i "arguments"|cut -d ":" -f2-) \
     && eval ./configure $COMPILEOPTIONS --add-dynamic-module=/tmp/modsecurity-nginx-v1.0.3 \
     && make modules -j2 
 
 FROM openresty/openresty:${RESTY_VERSION}-${RESTY_IMAGE_TAG}
 
-ARG RESTY_VERSION="1.21.4.1"
+ARG RESTY_NGINX_VERSION
+ARG RESTY_VERSION
+
+LABEL maintainer="1972871083@qq.com"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgeoip1 \
@@ -79,7 +84,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /usr/local/libmaxminddb /usr/local/libmaxminddb
 COPY --from=builder /usr/local/modsecurity /usr/local/modsecurity
-COPY --from=builder /tmp/openresty-${RESTY_VERSION}/bundle/nginx-1.21.4/objs/ngx_http_modsecurity_module.so /usr/local/openresty/nginx/modules/ngx_http_modsecurity_module.so
+COPY --from=builder /tmp/openresty-${RESTY_VERSION}/bundle/nginx-${RESTY_NGINX_VERSION}/objs/ngx_http_modsecurity_module.so /usr/local/openresty/nginx/modules/ngx_http_modsecurity_module.so
 
 RUN echo /usr/local/libmaxminddb/lib  >> /etc/ld.so.conf.d/local.conf \
     && echo /usr/local/modsecurity/lib  >> /etc/ld.so.conf.d/local.conf \
