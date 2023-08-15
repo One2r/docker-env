@@ -1,5 +1,5 @@
 local redis = require "resty.redis"
-local config = ngx.shared.config
+local config = ngx.shared.waf_config
 
 local red = redis:new()
 
