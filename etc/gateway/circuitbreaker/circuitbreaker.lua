@@ -1,4 +1,4 @@
-local gateway_circuit_breakers_module = {}
+local circuitbreaker = {}
 
 local cb_factory = require "lua-circuit-breaker.factory"
 local circuit_breakers = cb_factory:new()
@@ -12,18 +12,15 @@ local settings = {
     wait_duration_in_half_open_state= 120,
     half_open_max_calls_in_window= 5,
     half_open_min_calls_in_window= 2,
-    notify = function(name, state)
-      ngx.log(ngx.ERR,string.format("Breaker [ %s ] state changed to [ %s ]", name, state))
-    end,
+    -- notify = function(name, state)
+    --    ngx.log(ngx.ERR,string.format("Breaker [ %s ] state changed to [ %s ]", name, state))
+    -- end,
 }
 
-gateway_circuit_breakers_module.get_circuit_breaker = function(name, group)
-  local cb, _ = circuit_breakers:get_circuit_breaker(
-      name, -- Name of circuit breaker. This should be unique.
-      group, -- Used to group certain CB objects into one.
-      settings)
+circuitbreaker.get_circuit_breaker = function(name, group)
+  local cb, _ = circuit_breakers:get_circuit_breaker(name, group,settings)
   return cb
 end
 
 
-return gateway_circuit_breakers_module
+return circuitbreaker
