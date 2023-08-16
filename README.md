@@ -15,7 +15,7 @@
     ```docker build --force-rm=true -f ./dockerfiles/php/7.4-dockerfile . -t php:my-7.4-fpm```
     - jupyterhub 镜像  
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
-    - openresty waf 镜像   
+    - openresty gateway 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/gateway-dockerfile . -t openresty:gateway```
     - redis with plugin 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/redis-dockerfile . -t redis:6-with-plugin```
