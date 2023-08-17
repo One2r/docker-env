@@ -80,7 +80,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libyajl2 \
     zlib1g \
     libcurl4 \
-    libssl1.1 && rm -rf /var/lib/apt/lists/*
+    libssl1.1 \
+    curl \
+    unzip \
+    make \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/local/libmaxminddb /usr/local/libmaxminddb
 COPY --from=builder /usr/local/modsecurity /usr/local/modsecurity
@@ -90,5 +94,17 @@ RUN echo /usr/local/libmaxminddb/lib  >> /etc/ld.so.conf.d/local.conf \
     && echo /usr/local/modsecurity/lib  >> /etc/ld.so.conf.d/local.conf \
     && echo /usr/local/openresty/luajit/lib  >> /etc/ld.so.conf.d/local.conf \
     && ldconfig
+
+RUN cd /tmp \
+    && curl -fSL https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz -o luarocks-3.9.2.tar.gz \
+    && tar xzf luarocks-3.9.2.tar.gz \
+    && cd luarocks-3.9.2 \
+    && ./configure \
+    && make \
+    && make install \
+    && cd /tmp \
+    && rm -rf luarocks-3.9.2.tar.gz luarocks-3.9.2
+
+RUN luarocks install lua-circuit-breaker
 
 CMD ["/usr/bin/openresty", "-g", "daemon off;"]
