@@ -5,6 +5,8 @@ services:
   mysql:
     image: 'mysql:latest'
     privileged: true
+    deploy: 
+      mode: global
     volumes:
       - $DATA_DIR/mysql:/var/lib/mysql:rw
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -19,6 +21,8 @@ services:
   redis:
     image: 'redis:6-with-plugin'
     privileged: true
+    deploy: 
+      mode: global
     volumes:
       - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - $DATA_DIR/redis/:/data:rw

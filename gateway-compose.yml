@@ -1,0 +1,34 @@
+version: '1'
+name: gateway
+services:
+  gateway:
+    image: 'openresty:gateway'
+    privileged: true
+    deploy: 
+      mode: global
+    volumes:
+      - ./etc/gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./etc/gateway/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
+      - ./etc/gateway/init.lua:/usr/local/openresty/nginx/conf/init.lua:ro
+      - ./etc/gateway/waf:/usr/local/openresty/nginx/waf:ro
+      - ./etc/gateway/circuitbreaker:/usr/local/openresty/nginx/circuitbreaker:ro
+      - ./etc/gateway/cert:/usr/local/openresty/nginx/cert:ro
+      - ./etc/ip:/usr/local/openresty/nginx/ip:ro
+      - ./etc/gateway/conf.d:/etc/nginx/conf.d:ro
+      - ./var/log/gateway/nginx:/usr/local/openresty/nginx/logs:rw
+      - ./var/log/gateway/modsecurity:/var/log/modsecurity:rw
+    external_links:
+      - storage-redis-1:redis
+      - phpenv-nginx-1:nginx
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  dev:
+    external: true
