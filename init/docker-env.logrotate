@@ -1,0 +1,15 @@
+/path/to/docker-env/var/log/gateway/modsecurity/*.log
+/path/to/docker-env/var/log/gateway/nginx/*.log
+/path/to/docker-env/var/log/nginx/*.log
+/path/to/docker-env/var/log/php/7/*.log
+/path/to/docker-env/var/log/php/8/*.log
+{
+    daily
+    rotate 15
+    copytruncate
+    missingok
+    notifempty
+    nocompress
+    dateext
+    su root root
+}
