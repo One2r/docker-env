@@ -9,7 +9,7 @@ services:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./etc/nginx/cert:/etc/nginx/cert:ro
       - ./var/log/nginx:/var/log/nginx:rw
-      - $WORKSPACE_DIR/www:/usr/share/nginx/html:rw
+      - $WORKSPACE_DIR/www:/www:rw
     depends_on:
       - php7
       - php8
