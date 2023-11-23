@@ -20,6 +20,8 @@ services:
     external_links:
       - storage-redis-1:redis
       - phpenv-nginx-1:nginx
+    depends_on:
+      - modsecurity-audit-agent  
     networks:
       - dev
     restart: always
@@ -28,6 +30,22 @@ services:
     ports:
       - "80:80"
       - "443:443"
+
+  modsecurity-audit-agent:
+    image: 'modsecurity-audit-agent:latest'
+    privileged: true
+    deploy: 
+      mode: global
+    volumes:
+      - ./etc/modsecurity-audit-agent/config.yaml:/modsecurity-audit-agent/configs/config.yaml:ro
+      - ./var/log/modsecurity-audit-agent/:/modsecurity-audit-agent/storage/logs:rw
+    external_links:
+      - storage-redis-1:redis
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai   
 
 networks:
   dev:

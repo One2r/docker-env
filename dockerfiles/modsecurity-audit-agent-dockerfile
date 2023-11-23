@@ -1,0 +1,26 @@
+FROM golang:latest as builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends unzip \
+    make
+
+RUN cd /tmp \
+    && wget https://github.com/One2r/modsecurity-audit-agent/archive/refs/heads/main.zip \
+    && unzip main.zip \
+    && cd modsecurity-audit-agent-main \
+    && go mod tidy \
+    && make
+
+FROM golang:latest
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+	TZ=Asia/Shanghai
+
+WORKDIR /modsecurity-audit-agent
+
+COPY --from=builder /tmp/modsecurity-audit-agent-main/storage /modsecurity-audit-agent/storage
+COPY --from=builder /tmp/modsecurity-audit-agent-main/configs/config.yaml.example /modsecurity-audit-agent/configs/config.yaml
+COPY --from=builder /tmp/modsecurity-audit-agent-main/modsecurity-audit-agent /modsecurity-audit-agent
+
+CMD ["./modsecurity-audit-agent"]

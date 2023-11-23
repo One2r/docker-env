@@ -20,6 +20,8 @@
     ```docker build --force-rm=true -f ./dockerfiles/jupyterhub-dockerfile . -t jupyterhub:my-jupyterhub```
     - openresty gateway 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/gateway-dockerfile . -t openresty:gateway```
+    - modsecurity-audit-agent 镜像   
+    ```docker build --force-rm=true -f ./dockerfiles/modsecurity-audit-agent-dockerfile . -t modsecurity-audit-agent:latest```
     - redis with plugin 镜像   
     ```docker build --force-rm=true -f ./dockerfiles/redis-dockerfile . -t redis:6-with-plugin```
 
