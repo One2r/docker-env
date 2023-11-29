@@ -7,7 +7,6 @@ services:
     volumes:
       - $CONFIG_DIR/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - $CONFIG_DIR/nginx/conf.d:/etc/nginx/conf.d:ro
-      - $CONFIG_DIR/nginx/cert:/etc/nginx/cert:ro
       - $LOG_DIR/nginx:/var/log/nginx:rw
       - $WORKSPACE_DIR/www:/www:rw
     depends_on:
