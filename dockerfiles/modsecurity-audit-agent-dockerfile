@@ -1,4 +1,6 @@
-FROM golang:1-alpine3.17 as builder
+ARG ALPINE_VERSION="3.17"
+
+FROM golang:1-alpine${ALPINE_VERSION} as builder
 
 RUN apk update && apk add unzip \
     make
@@ -10,7 +12,7 @@ RUN cd /tmp \
     && go mod tidy \
     && make
 
-FROM golang:1-alpine3.17
+FROM alpine:${ALPINE_VERSION}
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
