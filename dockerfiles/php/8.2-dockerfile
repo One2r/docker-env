@@ -29,6 +29,7 @@ RUN docker-php-ext-install gd \
 	zip \
 	ldap \
 	pdo_mysql \
+    mysqli \
 	mbstring \
 	bcmath \
 	opcache
