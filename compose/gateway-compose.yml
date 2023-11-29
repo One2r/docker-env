@@ -19,9 +19,7 @@ services:
       - $LOG_DIR/gateway/modsecurity:/var/log/modsecurity:rw
     external_links:
       - storage-redis-1:redis
-      - phpenv-nginx-1:nginx
-    depends_on:
-      - modsecurity-audit-agent  
+      - phpenv-nginx-1:nginx  
     networks:
       - dev
     restart: always
