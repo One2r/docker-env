@@ -9,7 +9,7 @@ services:
       mode: global
     volumes:
       - $DATA_DIR/mysql:/var/lib/mysql:rw
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - $CONFIG_DIR/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     networks:
@@ -24,7 +24,7 @@ services:
     deploy: 
       mode: global
     volumes:
-      - ./etc/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - $CONFIG_DIR/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - $DATA_DIR/redis/:/data:rw
     networks:
       - dev
@@ -33,7 +33,7 @@ services:
       - TZ=Asia/Shanghai
     ports:
       - "6379:6379"
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    command: ["redis-server","/usr/local/etc/redis/redis.conf","--requirepass",$REDIS_REQUIREPASS]
 
 networks:
   dev:
