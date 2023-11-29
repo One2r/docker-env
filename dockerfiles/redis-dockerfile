@@ -1,4 +1,4 @@
-FROM redis:6
+FROM redis:6-alpine
 
 LABEL maintainer="1972871083@qq.com"
 
