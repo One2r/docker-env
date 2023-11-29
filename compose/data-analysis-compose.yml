@@ -1,0 +1,28 @@
+version: '1'
+name: data-analysis
+services:
+  jupyter:
+     image: 'jupyterhub:my-jupyterhub'
+     privileged: true
+     volumes:
+       - $CONFIG_DIR/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
+       - $WORKSPACE_DIR/jupyterhub:/root/jupyterhub:rw
+     networks:
+       - dev
+     restart: always
+     environment:
+       - TZ=Asia/Shanghai
+       - JUPYTER_AUTHENTICATOR=$JUPYTER_AUTHENTICATOR
+       - JUPYTER_ADMIN_USERS=$JUPYTER_ADMIN_USERS
+       - JUPYTER_DUMMY_PASSWORD=$JUPYTER_DUMMY_PASSWORD
+       - JUPYTER_ALLOWED_USERS=$JUPYTER_ALLOWED_USERS
+       - GITLAB_HOST=$JUPYTER_GITLAB_HOST
+       - OAUTH_CALLBACK_URL=$JUPYTER_OAUTH_CALLBACK_URL
+       - OAUTH_CLIENT_ID=$JUPYTER_OAUTH_CLIENT_ID
+       - OAUTH_CLIENT_SECRET=$JUPYTER_OAUTH_CLIENT_SECRET
+     ports:
+       - "8000:8000"
+       
+networks:
+  dev:
+    external: true

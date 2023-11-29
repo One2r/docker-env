@@ -1,0 +1,31 @@
+version: '1'
+name: skywalking
+services:
+  ui:
+    image: 'apache/skywalking-ui'
+    privileged: true
+    depends_on:
+      - oap-server
+    links:
+      - oap-server
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - SW_OAP_ADDRESS=http://oap-server:12800
+    ports:
+      - "8080:8080"
+
+  oap-server:
+    image: 'apache/skywalking-oap-server'
+    privileged: true
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+        
+networks:
+  dev:
+    external: true
