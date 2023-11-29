@@ -1,6 +1,6 @@
-FROM golang:latest as builder
+FROM golang:1-alpine3.17 as builder
 
-RUN apt-get update && apt-get install -y --no-install-recommends unzip \
+RUN apk update && apk add unzip \
     make
 
 RUN cd /tmp \
@@ -10,7 +10,7 @@ RUN cd /tmp \
     && go mod tidy \
     && make
 
-FROM golang:latest
+FROM golang:1-alpine3.17
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
