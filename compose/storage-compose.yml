@@ -8,8 +8,8 @@ services:
     deploy: 
       mode: global
     volumes:
-      - $DATA_DIR/mysql:/var/lib/mysql:rw
       - $CONFIG_DIR/mysql:/etc/mysql/conf.d:ro
+      - $DATA_DIR/mysql:/var/lib/mysql:rw
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     networks:
