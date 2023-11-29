@@ -1,0 +1,5 @@
+*
+!php-fpm.conf.default
+!php.ini-production
+!www.conf.default
+!.gitignore

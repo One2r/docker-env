@@ -1,0 +1,29 @@
+version: '1'
+name: prometheus
+
+services:
+  grafana:
+    image: 'grafana/grafana'
+    privileged: true
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+      
+  prometheus:
+    image: 'prom/prometheus'
+    privileged: true
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+
+networks:
+  dev:
+    external: true

@@ -1,0 +1,19 @@
+version: '1'
+name: mq
+services:
+  rabbit:
+    image: 'rabbitmq:3-management'
+    privileged: true
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - RABBITMQ_DEFAULT_USER=$RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS=$RABBITMQ_DEFAULT_PASS
+    ports:
+      - "15672:15672"
+      
+networks:
+  dev:
+    external: true

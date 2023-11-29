@@ -1,0 +1,52 @@
+version: '1'
+name: gateway
+services:
+  gateway:
+    image: 'openresty:gateway'
+    privileged: true
+    deploy: 
+      mode: global
+    volumes:
+      - $CONFIG_DIR/gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - $CONFIG_DIR/gateway/proxy_params:/usr/local/openresty/nginx/conf/proxy_params:ro
+      - $CONFIG_DIR/gateway/init.lua:/usr/local/openresty/nginx/conf/init.lua:ro
+      - $CONFIG_DIR/gateway/waf:/usr/local/openresty/nginx/waf:ro
+      - $CONFIG_DIR/gateway/circuitbreaker:/usr/local/openresty/nginx/circuitbreaker:ro
+      - $CONFIG_DIR/gateway/cert:/usr/local/openresty/nginx/cert:ro
+      - $CONFIG_DIR/ip:/usr/local/openresty/nginx/ip:ro
+      - $CONFIG_DIR/gateway/conf.d:/etc/nginx/conf.d:ro
+      - $LOG_DIR/gateway/nginx:/usr/local/openresty/nginx/logs:rw
+      - $LOG_DIR/gateway/modsecurity:/var/log/modsecurity:rw
+    external_links:
+      - storage-redis-1:redis
+      - phpenv-nginx-1:nginx
+    depends_on:
+      - modsecurity-audit-agent  
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "80:80"
+      - "443:443"
+
+  modsecurity-audit-agent:
+    image: 'modsecurity-audit-agent:latest'
+    privileged: true
+    deploy: 
+      mode: global
+    volumes:
+      - $CONFIG_DIR/modsecurity-audit-agent/config.yaml:/modsecurity-audit-agent/configs/config.yaml:ro
+      - $LOG_DIR/modsecurity-audit-agent/:/modsecurity-audit-agent/storage/logs:rw
+    external_links:
+      - storage-redis-1:redis
+    networks:
+      - dev
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai   
+
+networks:
+  dev:
+    external: true

@@ -5,10 +5,9 @@ services:
     image: 'nginx:stable'
     privileged: true
     volumes:
-      - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./etc/nginx/cert:/etc/nginx/cert:ro
-      - ./var/log/nginx:/var/log/nginx:rw
+      - $CONFIG_DIR/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $CONFIG_DIR/nginx/conf.d:/etc/nginx/conf.d:ro
+      - $LOG_DIR/nginx:/var/log/nginx:rw
       - $WORKSPACE_DIR/www:/www:rw
     depends_on:
       - php7
@@ -23,10 +22,10 @@ services:
     image: 'php:my-7.4-fpm'
     privileged: true
     volumes:
-      - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
-      - ./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
-      - ./var/log/php/7:/var/log/php:rw
+      - $CONFIG_DIR/php/7/php.ini:/usr/local/etc/php/php.ini:ro
+      - $CONFIG_DIR/php/7/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
+      - $CONFIG_DIR/php/7/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - $LOG_DIR/php/7:/var/log/php:rw
       - $WORKSPACE_DIR/www:/www:rw
     external_links:
       - skywalking-oap-server-1:skywalking-oap
@@ -42,10 +41,10 @@ services:
     image: 'php:my-8.2-fpm'
     privileged: true
     volumes:
-      - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - ./etc/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
-      - ./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
-      - ./var/log/php/8:/var/log/php:rw
+      - $CONFIG_DIR/php/8/php.ini:/usr/local/etc/php/php.ini:ro
+      - $CONFIG_DIR/php/8/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
+      - $CONFIG_DIR/php/8/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - $LOG_DIR/php/8:/var/log/php:rw
       - $WORKSPACE_DIR/www:/www:rw
     external_links:
       - storage-redis-1:redis

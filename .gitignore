@@ -17,3 +17,6 @@
 .idea/
 
 .ENV
+
+data/
+workspace/
