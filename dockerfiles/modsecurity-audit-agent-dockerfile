@@ -2,8 +2,9 @@ ARG ALPINE_VERSION="3.17"
 
 FROM golang:1-alpine${ALPINE_VERSION} as builder
 
-RUN apk update && apk add unzip \
-    make
+RUN apk update && apk add unzip make
+
+ENV GOPROXY=https://goproxy.cn
 
 RUN cd /tmp \
     && wget https://github.com/One2r/modsecurity-audit-agent/archive/refs/heads/main.zip \
