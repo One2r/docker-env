@@ -1,7 +1,10 @@
-FROM golang:latest as builder
+ARG ALPINE_VERSION="3.17"
 
-RUN apt-get update && apt-get install -y --no-install-recommends unzip \
-    make
+FROM golang:1-alpine${ALPINE_VERSION} as builder
+
+RUN apk update && apk add unzip make
+
+ENV GOPROXY=https://goproxy.cn
 
 RUN cd /tmp \
     && wget https://github.com/One2r/modsecurity-audit-agent/archive/refs/heads/main.zip \
@@ -10,7 +13,7 @@ RUN cd /tmp \
     && go mod tidy \
     && make
 
-FROM golang:latest
+FROM alpine:${ALPINE_VERSION}
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
