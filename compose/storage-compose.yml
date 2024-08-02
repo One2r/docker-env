@@ -18,6 +18,9 @@ services:
     
   redis:
     image: 'redis:6-with-plugin'
+    build:
+      context: "../dockerfiles/"
+      dockerfile: "redis-dockerfile"
     privileged: true
     deploy: 
       mode: global

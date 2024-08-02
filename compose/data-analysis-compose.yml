@@ -3,6 +3,9 @@ name: data-analysis
 services:
   jupyter:
      image: 'jupyterhub:my-jupyterhub'
+     build:
+       context: "../dockerfiles/"
+       dockerfile: "jupyterhub-dockerfile"
      privileged: true
      volumes:
        - $CONFIG_DIR/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro
