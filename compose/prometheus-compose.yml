@@ -5,8 +5,6 @@ services:
   grafana:
     image: 'grafana/grafana'
     privileged: true
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -18,12 +16,11 @@ services:
   prometheus:
     image: 'prom/prometheus'
     privileged: true
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
 
 networks:
-  dev:
-    external: true
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}

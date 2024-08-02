@@ -12,8 +12,6 @@ services:
     depends_on:
       - php7
       - php8
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -31,8 +29,6 @@ services:
       - skywalking-oap-server-1:skywalking-oap
       - storage-redis-1:redis
       - storage-mysql-1:mysql
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -49,12 +45,11 @@ services:
     external_links:
       - storage-redis-1:redis
       - storage-mysql-1:mysql
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
  
 networks:
-  dev:
-    external: true
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}

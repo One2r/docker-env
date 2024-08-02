@@ -12,8 +12,6 @@ services:
       - $DATA_DIR/mysql:/var/lib/mysql:rw
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-    networks:
-      - dev
     ports:
       - "3306:3306"
     restart: always
@@ -26,8 +24,6 @@ services:
     volumes:
       - $CONFIG_DIR/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - $DATA_DIR/redis/:/data:rw
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -36,5 +32,6 @@ services:
     command: ["redis-server","/usr/local/etc/redis/redis.conf","--requirepass",$REDIS_REQUIREPASS]
 
 networks:
-  dev:
-    external: true
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}

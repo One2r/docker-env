@@ -4,8 +4,6 @@ services:
   rabbit:
     image: 'rabbitmq:3-management'
     privileged: true
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -15,5 +13,6 @@ services:
       - "15672:15672"
       
 networks:
-  dev:
-    external: true
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}

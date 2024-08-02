@@ -8,8 +8,6 @@ services:
       - oap-server
     links:
       - oap-server
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -20,12 +18,11 @@ services:
   oap-server:
     image: 'apache/skywalking-oap-server'
     privileged: true
-    networks:
-      - dev
     restart: always
     environment:
       - TZ=Asia/Shanghai
         
 networks:
-  dev:
-    external: true
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}
