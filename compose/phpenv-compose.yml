@@ -18,6 +18,9 @@ services:
  
   php7:
     image: 'php:my-7.4-fpm'
+    build:
+      context: "../dockerfiles/php/"
+      dockerfile: "7.4-dockerfile"
     privileged: true
     volumes:
       - $CONFIG_DIR/php/7/php.ini:/usr/local/etc/php/php.ini:ro
@@ -36,6 +39,9 @@ services:
   php8:
     image: 'php:my-8.2-fpm'
     privileged: true
+    build:
+      context: "../dockerfiles/php/"
+      dockerfile: "8.2-dockerfile"
     volumes:
       - $CONFIG_DIR/php/8/php.ini:/usr/local/etc/php/php.ini:ro
       - $CONFIG_DIR/php/8/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
