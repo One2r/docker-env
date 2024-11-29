@@ -1,3 +1,16 @@
 FROM flink:latest
 
+RUN echo 'deb [trusted=yes] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main\n# deb-src https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main' >> /etc/apt/sources.list &&\
+    apt-get update
+
+RUN apt-get install -y python3.11 &&\
+    rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3.11 /usr/bin/python
+
+RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py
+
+RUN pip install apache-flink -i https://mirrors.aliyun.com/pypi/simple/
+
+ADD ./vendor/flink-connector-base-1.20.0.jar /opt/flink/lib/flink-connector-base-1.20.0.jar
 ADD ./vendor/flink-sql-connector-kafka-3.3.0-1.20.jar /opt/flink/lib/flink-sql-connector-kafka-3.3.0-1.20.jar
