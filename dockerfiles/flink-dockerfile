@@ -3,7 +3,7 @@ FROM flink:latest
 RUN echo 'deb [trusted=yes] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main\n# deb-src https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main' >> /etc/apt/sources.list &&\
     apt-get update
 
-RUN apt-get install -y python3.11 &&\
+RUN apt-get install -y --no-install-recommends python3.11 &&\
     rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python3.11 /usr/bin/python
