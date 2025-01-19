@@ -3,7 +3,7 @@ name: storage
 
 services:
   mysql:
-    image: 'mysql:latest'
+    image: 'mysql:lts'
     privileged: true
     deploy: 
       mode: global
@@ -15,6 +15,7 @@ services:
     ports:
       - "3306:3306"
     restart: always
+    profiles: ["mysql"] 
     
   redis:
     image: 'redis:6-with-plugin'
@@ -33,6 +34,7 @@ services:
     ports:
       - "6379:6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf","--requirepass",$REDIS_REQUIREPASS]
+    profiles: ["redis"]
 
 networks:
   default:
