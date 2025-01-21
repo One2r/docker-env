@@ -1,0 +1,31 @@
+version: '1'
+name: hive
+services:
+  metastore:
+    image: 'hive:my-hive'
+    environment:
+      SERVICE_NAME: metastore
+      DB_DRIVER: mysql
+      SERVICE_OPTS: "-Djavax.jdo.option.ConnectionDriverName=com.mysql.cj.jdbc.Driver 
+                      -Djavax.jdo.option.ConnectionURL=jdbc:mysql://${HIVE_METASTORE_HOST}:${HIVE_METASTORE_PORT}/${HIVE_METASTORE_DB}?createDatabaseIfNotExist=true
+                      -Djavax.jdo.option.ConnectionUserName=${HIVE_METASTORE_USER} 
+                      -Djavax.jdo.option.ConnectionPassword=${HIVE_METASTORE_PASSWORD}"
+    ports:
+      - "9083:9083"
+
+  hiveserver2:
+    image: 'hive:my-hive'
+    environment:
+      SERVICE_NAME: hiveserver2
+      SERVICE_OPTS: "-Dhive.metastore.uris=thrift://metastore:9083"
+      IS_RESUME: "true"
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    depends_on:
+      - metastore
+
+networks:
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}
