@@ -3,6 +3,9 @@ name: hive
 services:
   metastore:
     image: 'hive:my-hive'
+    build:
+      context: "../dockerfiles/"
+      dockerfile: "hive-dockerfile"
     environment:
       SERVICE_NAME: metastore
       DB_DRIVER: mysql
@@ -15,6 +18,9 @@ services:
 
   hiveserver2:
     image: 'hive:my-hive'
+    build:
+      context: "../dockerfiles/"
+      dockerfile: "hive-dockerfile"
     environment:
       SERVICE_NAME: hiveserver2
       SERVICE_OPTS: "-Dhive.metastore.uris=thrift://metastore:9083"
