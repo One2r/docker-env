@@ -3,6 +3,9 @@ name: flink
 services:
   jobmanager:
     image: "flink:my-flink"
+    build:
+      context: "../dockerfiles/"
+      dockerfile: "flink-dockerfile"
     ports:
       - "8081:8081"
     command: jobmanager
@@ -13,6 +16,9 @@ services:
       
   taskmanager:
     image: "flink:my-flink"
+    build:
+      context: "../dockerfiles/"
+      dockerfile: "flink-dockerfile"
     depends_on:
       - jobmanager
     command: taskmanager
