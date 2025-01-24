@@ -68,7 +68,7 @@ services:
       dockerfile: "hive-dockerfile"
     environment:
       SERVICE_NAME: hiveserver2
-      SERVICE_OPTS: "-Dhive.metastore.uris=thrift://hive-metastore:9083"
+      SERVICE_OPTS: "-Ddfs.permissions=false -Dhive.metastore.uris=thrift://hive-metastore:9083"
       IS_RESUME: "true"
     volumes:
       - $CONFIG_DIR/bigdata/hadoop/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml:ro
