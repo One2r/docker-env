@@ -1,14 +1,13 @@
-FROM apache/hadoop:3.3.6
+FROM apache/hive:4.0.1
 
 USER root
 
-RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup \
-    && wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo \
-    && yum clean all && yum makecache \
-    && yum install -y which
-
 ENV PATH="/opt/flume/bin:$PATH"
 ENV HADOOP_HOME="/opt/hadoop"
+ENV HIVE_HOME="/opt/hive"
+
+RUN apt-get update && apt-get install -y --no-install-recommends wget \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp \
     && wget https://dlcdn.apache.org/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz \
@@ -19,4 +18,4 @@ RUN cd /tmp \
 ADD ./vendor/kafka-clients-3.9.0.jar /opt/flume/lib/kafka-clients-3.9.0.jar
 ADD ./vendor/kafka_2.13-3.9.0.jar /opt/flume/lib/kafka_2.13-3.9.0.jar
 
-CMD ["flume-ng"]
+ENTRYPOINT ["flume-ng"]

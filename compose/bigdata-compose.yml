@@ -91,7 +91,7 @@ services:
       - hadoop-namenode
     ports:
       - "41414:41414"  
-    command: ["flume-ng","agent","--conf","/opt/flume/conf","--conf-file","/opt/flume/conf/flume-conf.properties","--name","a1","-Dflume.monitoring.type=http","-Dflume.monitoring.port=41414"]
+    entrypoint: ["flume-ng","agent","--conf","/opt/flume/conf","--conf-file","/opt/flume/conf/flume-conf.properties","--name","a1","-Dflume.monitoring.type=http","-Dflume.monitoring.port=41414"]
 
 networks:
   default:
