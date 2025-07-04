@@ -95,5 +95,5 @@ services:
 
 networks:
   default:
-     external:
-       name: ${DOCKER_NETWORK_NAME}
+    external: true
+    name: ${DOCKER_NETWORK_NAME}
