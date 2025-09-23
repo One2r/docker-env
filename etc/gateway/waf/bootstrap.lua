@@ -5,7 +5,7 @@ local red = redis:new()
 
 redis.register_module_prefix("cf")
 
-red:set_timeouts(1000, 1000, 1000) -- 1 sec
+red:set_timeouts(200, 200, 200) -- 200 ms
 
 local ok, err = red:connect(config:get("redis-host"), config:get("redis-port"))
 if not ok then
