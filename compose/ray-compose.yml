@@ -1,0 +1,26 @@
+version: '1'
+name: ray
+services:
+  ray-head:
+    image: 'rayproject/ray:2.43.0-py311-cpu'
+    command: ["ray","start","--head","--port","26379","--num-cpus","0","--dashboard-host","0.0.0.0","--block"]
+    ports:
+      - "8265:8265"
+
+  ray-worker-1:
+    image: 'rayproject/ray:2.43.0-py311-cpu'
+    depends_on:
+      - ray-head
+    command: ["ray","start","--address","ray-head:26379","--block"]
+
+  ray-worker-2:
+    image: 'rayproject/ray:2.43.0-py311-cpu'
+    depends_on:
+      - ray-head
+    command: ["ray","start","--address","ray-head:26379","--block"]
+
+
+networks:
+  default:
+     external:
+       name: ${DOCKER_NETWORK_NAME}
